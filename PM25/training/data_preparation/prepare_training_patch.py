@@ -1,10 +1,9 @@
-from matplotlib.pyplot import savefig
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename:    crop_sentinel2_l1c_from_with_MODIS_PM25.py
+# @Filename:    prepare_training_patch.py
 # @Author:      Dr. Rui Song
 # @Email:       rui.song@physics.ox.ac.uk
-# @Time:        29/10/2024 18:07
+# @Time:        29/10/2024 22:47
 
 from rasterio.windows import Window
 import matplotlib.pyplot as plt
@@ -13,13 +12,26 @@ import numpy as np
 import rasterio
 import os
 
-MODIS_file = '/Users/rs/Projects/UKIF/PM25/S2L1C_image/data/GHAP_PM2.5_D1K_20180117_V1_cropped_to_10m_extent.nc'
-Sentinel_file = '/Users/rs/Projects/UKIF/PM25/S2L1C_image/data/Sentinel2_L1C_20180117_CloudMasked.tif'
+MODIS_dir = './modis_pm25_data'
+Sentinel_data = './S2_London_2018'
+
 savefig_dir = './training_figs'
 savedata_dir = './training_data'
 
 os.makedirs(savefig_dir, exist_ok=True)
 os.makedirs(savedata_dir, exist_ok=True)
+
+date_list = []
+for file in os.listdir(MODIS_dir):
+    if file.endswith('.nc'):
+        MODIS_file = os.path.join(MODIS_dir, file)
+        YYYYMMDD = file.split('_')[3]
+        date_list.append(YYYYMMDD)
+
+for date_i in date_list:
+    MODIS_file = os.path.join(MODIS_dir, f'GHAP_PM2.5_D1K_{date_i}_V1_cropped_to_10m_extent.nc')
+    Sentinel_file = os.path.join(Sentinel_data, f'Sentinel2_L1C_{date_i}_CloudMasked.tif')
+
 
 # Open the NetCDF file
 dataset = nc.Dataset(MODIS_file, mode='r')
