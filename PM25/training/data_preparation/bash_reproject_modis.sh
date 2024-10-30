@@ -13,9 +13,9 @@ for file in "$input_dir"/*.nc; do
   filename=$(basename "$file" .nc)
 
   # Define the output filename
-  output_file="$output_dir/${filename}_cropped_projected.nc"
+  output_file="$output_dir/${filename}_projected.nc"
 
-  gdalwarp -t_srs EPSG:4326 -te -0.5861507 51.2401733 0.3231240 51.7291263 \
-           -r bilinear "$file" "$output_file"
+  gdalwarp -te -0.5861507 51.2401733 0.3231240 51.7291263 \
+           -r near "$file" "$output_file"
   echo "Processed $file -> $output_file"
 done
