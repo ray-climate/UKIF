@@ -37,8 +37,8 @@ def load_data(data_dir):
     return X, y
 
 # Load and preprocess the data
-data_dir = '../data_preparation/training_data'
-output_fig = '../training_figs'
+data_dir = './data_preparation/training_data'
+output_fig = './training_figs'
 os.makedirs(output_fig, exist_ok=True)
 
 X, y = load_data(data_dir)
