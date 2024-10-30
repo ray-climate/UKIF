@@ -29,6 +29,7 @@ for file in os.listdir(MODIS_dir):
         date_list.append(YYYYMMDD)
 
 for date_i in date_list:
+
     MODIS_file = os.path.join(MODIS_dir, f'GHAP_PM2.5_D1K_{date_i}_V1_cropped_cropped_projected.nc')
     Sentinel_file = os.path.join(Sentinel_data, f'Sentinel2_L1C_{date_i}_CloudMasked.tif')
 
@@ -42,9 +43,6 @@ for date_i in date_list:
     # Get scale factor and fill value
     scale_factor = dataset.variables['Band1'].scale_factor
     fill_value = dataset.variables['Band1']._FillValue
-
-    # Apply the scale factor and mask the fill value
-    pm25_array = np.where(pm25_array == fill_value, np.nan, pm25_array * scale_factor)
 
     # Close the dataset
     dataset.close()
@@ -90,7 +88,7 @@ for date_i in date_list:
 
         return patch
 
-    def save_rgb_quickview(patch, patch_number):
+    def save_rgb_quickview(patch, filename):
         """
         Save an RGB quickview using bands 4, 3, and 2 of the patch as a PNG file.
         """
@@ -102,7 +100,7 @@ for date_i in date_list:
         plt.imshow(rgb_patch)
         # Save the RGB image
         plt.axis('off')
-        plt.savefig(f'{savefig_dir}/patch_{patch_number}.png', bbox_inches='tight', pad_inches=0)
+        plt.savefig(f'{savefig_dir}/{filename}.png', bbox_inches='tight', pad_inches=0)
         plt.close()
 
     def bad_value_percentage(patch):
@@ -121,10 +119,10 @@ for date_i in date_list:
             bad_percentage = bad_value_percentage(patch)
             if bad_percentage < 10:  # Save only if bad values are below 10%
                 print(f"Patch {total_number} extracted successfully with bad value percentage: {bad_percentage:.2f}%")
-                save_rgb_quickview(patch, total_number)
+                save_rgb_quickview(patch, f'date_{date_i}_patch_{total_number}')
                 # Save patch and PM2.5 value into npz file
-                np.savez(f'{savedata_dir}/patch_{total_number}.npz', patch=patch, pm25=PM25_list[i])
+                np.savez(f'{savedata_dir}/date_{date_i}_patch_{total_number}.npz', patch=patch, pm25=PM25_list[i])
             else:
-                print(f"Patch {total_number} skipped due to high bad value percentage: {bad_percentage:.2f}%")
+                print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}%")
 
         total_number += 1
