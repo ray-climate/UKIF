@@ -30,7 +30,7 @@ for file in os.listdir(MODIS_dir):
 
 for date_i in date_list:
 
-    MODIS_file = os.path.join(MODIS_dir, f'GHAP_PM2.5_D1K_{date_i}_V1_cropped_cropped_projected.nc')
+    MODIS_file = os.path.join(MODIS_dir, f'GHAP_PM2.5_D1K_{date_i}_V1_cropped_projected.nc')
     Sentinel_file = os.path.join(Sentinel_data, f'Sentinel2_L1C_{date_i}_CloudMasked.tif')
 
     # Open the NetCDF file
