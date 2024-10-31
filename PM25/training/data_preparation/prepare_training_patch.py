@@ -126,3 +126,5 @@ for date_i in date_list:
                 print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}%")
 
         total_number += 1
+
+# test
