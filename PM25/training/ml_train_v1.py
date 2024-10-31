@@ -17,6 +17,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Define the data folder
 data_folder = './data_preparation/training_data'
+output_fig = './training_figs'
+os.makedirs(output_fig, exist_ok=True)
 
 # Get list of .npz files
 npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npz')]
@@ -79,7 +81,7 @@ model = Model(inputs=inputs, outputs=outputs)
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='mse', metrics=['mae'])
 
 # Train the model
-history = model.fit(train_generator, validation_data=val_generator, epochs=10)
+history = model.fit(train_generator, validation_data=val_generator, epochs=100)
 
 # Plot training and validation loss
 plt.figure()
@@ -89,7 +91,7 @@ plt.legend()
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Training and Validation Loss')
-plt.show()
+plt.savefig(os.path.join(output_fig, 'training_validation_loss.png'))
 
 # Evaluate the model on validation data
 val_true = []
@@ -117,5 +119,4 @@ plt.xlabel('True PM2.5')
 plt.ylabel('Predicted PM2.5')
 plt.title('Predicted vs True PM2.5')
 plt.plot([val_true.min(), val_true.max()], [val_true.min(), val_true.max()], 'r--')
-plt.show()
-
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true.png'))
