@@ -74,7 +74,7 @@ model.summary()
 
 # Train the model
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping])
+history = model.fit(X_train, y_train, epochs=50, batch_size=8, validation_split=0.2, callbacks=[early_stopping])
 
 # Evaluate the model
 test_loss, test_mae = model.evaluate(X_test, y_test)
