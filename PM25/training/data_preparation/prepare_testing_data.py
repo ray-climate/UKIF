@@ -14,18 +14,11 @@ tif_file = './S2_London_2018/Sentinel2_L1C_20180807_CloudMasked.tif'
 save_dirt = './testing_data'
 os.makedirs(save_dirt, exist_ok=True)
 
-# Open the GeoTIFF file
+# Open the GeoTIFF file and read all bands into one variable 'data'
 with rasterio.open(tif_file) as src:
-    num_bands = src.count
-    band_data = {}
-    for i in range(1, num_bands + 1):
-        # Get the band description (e.g., 'B1', 'B2', ...)
-        band_name = src.descriptions[i - 1]
-        # Read the band data
-        data = src.read(i)
-        # Store the data in the dictionary
-        band_data[band_name] = data
+    data = src.read()  # This reads all bands
 
-# Save all bands into an NPZ file
-np.savez(os.path.join(save_dirt, 'Sentinel2_L1C_20180807_CloudMasked.npz'), **band_data)
+# Save all bands into an NPZ file under the variable name 'data'
+np.savez(os.path.join(save_dirt, 'Sentinel2_L1C_20180807_CloudMasked.npz'), data=data)
+
 
