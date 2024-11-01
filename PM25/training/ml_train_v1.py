@@ -46,8 +46,14 @@ class DataGenerator(Sequence):
             data = np.load(file)
             patch = data['patch']  # Assuming data is stored with key 'patch'
             pm25 = data['pm25']  # Assuming data is stored with key 'pm25'
+
+            # Replace all-zero pixels with NaN
+            mask = np.all(patch == 0, axis=0)  # Find all-zero pixels across all bands
+            patch[:, mask] = np.nan  # Set all bands of all-zero pixels to NaN
+
             batch_patches.append(patch)
             batch_pm25.append(pm25)
+
         X = np.array(batch_patches)
         X = np.transpose(X, (0, 2, 3, 1))  # Rearrange dimensions to (batch_size, 128, 128, 13)
         y = np.array(batch_pm25)
