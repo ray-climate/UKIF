@@ -14,6 +14,7 @@ from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+import tensorflow as tf
 
 # Define the data folder
 data_folder = './data_preparation/training_data'
@@ -25,7 +26,6 @@ npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.
 
 # Split the data into training and validation sets
 train_files, val_files = train_test_split(npz_files, test_size=0.2, random_state=42)
-
 
 # Define the data generator
 class DataGenerator(Sequence):
@@ -44,8 +44,8 @@ class DataGenerator(Sequence):
         batch_pm25 = []
         for file in batch_files:
             data = np.load(file)
-            patch = data['patch']  # Assuming data is stored with key 'patch'
-            pm25 = data['pm25']  # Assuming data is stored with key 'pm25'
+            patch = data['patch'].astype(np.float32)  # Convert patch to float to support NaN values
+            pm25 = data['pm25']
 
             # Replace all-zero pixels with NaN
             mask = np.all(patch == 0, axis=0)  # Find all-zero pixels across all bands
@@ -63,6 +63,15 @@ class DataGenerator(Sequence):
         if self.shuffle:
             np.random.shuffle(self.list_files)
 
+def masked_mse(y_true, y_pred):
+    mask = tf.math.is_nan(y_true)  # Create a mask for NaN values in y_true
+    y_true = tf.where(mask, 0.0, y_true)  # Replace NaNs in y_true with zero for computation
+    y_pred = tf.where(mask, 0.0, y_pred)  # Replace corresponding predictions with zero
+
+    # Count valid entries (non-NaNs)
+    count = tf.reduce_sum(tf.cast(~mask, tf.float32))
+    mse = tf.reduce_sum(tf.square(y_true - y_pred)) / count  # MSE on valid entries only
+    return mse
 
 # Create data generators
 batch_size = 32
@@ -84,7 +93,7 @@ x = Dense(128, activation='relu')(x)
 outputs = Dense(1)(x)  # Output is a single value
 
 model = Model(inputs=inputs, outputs=outputs)
-model.compile(optimizer=Adam(learning_rate=1e-4), loss='mse', metrics=['mae'])
+model.compile(optimizer=Adam(learning_rate=1e-4), loss=masked_mse, metrics=['mae'])
 
 # Train the model
 history = model.fit(train_generator, validation_data=val_generator, epochs=100)
