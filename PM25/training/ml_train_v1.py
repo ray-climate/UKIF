@@ -47,10 +47,6 @@ class DataGenerator(Sequence):
             patch = data['patch'].astype(np.float32)  # Convert patch to float to support NaN values
             pm25 = data['pm25']
 
-            # Replace all-zero pixels with NaN
-            mask = np.all(patch == 0, axis=0)  # Find all-zero pixels across all bands
-            patch[:, mask] = np.nan  # Set all bands of all-zero pixels to NaN
-
             batch_patches.append(patch)
             batch_pm25.append(pm25)
 
@@ -97,7 +93,7 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss=masked_mse, metrics=['mae
 
 # Train the model
 history = model.fit(train_generator, validation_data=val_generator, epochs=100)
-
+model.save('pm25_model.h5')
 # Plot training and validation loss
 plt.figure()
 plt.plot(history.history['loss'], label='Training loss')
