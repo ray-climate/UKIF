@@ -23,7 +23,7 @@ def masked_mse(y_true, y_pred):
 model = load_model('pm25_model.h5', custom_objects={'masked_mse': masked_mse})
 
 # Load the test data
-test_data_path = './training/testing_data/Sentinel2_L1C_20180807_CloudMasked.npz'  # Replace with your test data path
+test_data_path = './data_preparation/testing_data/Sentinel2_L1C_20180807_CloudMasked.npz'  # Replace with your test data path
 data = np.load(test_data_path)
 test_data = data['data']  # Replace 'test_data' with the actual key in your npz file
 
