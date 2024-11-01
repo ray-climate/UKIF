@@ -11,4 +11,4 @@
 
 # Your script execution
 conda activate tf-gpu
-python ml_train.py
+python ml_train_v1.py
