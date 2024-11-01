@@ -26,9 +26,8 @@ model = load_model('pm25_model.h5', custom_objects={'masked_mse': masked_mse})
 # Load the test data
 test_data_path = './data_preparation/testing_data/Sentinel2_L1C_20180807_CloudMasked.npz'
 data = np.load(test_data_path)
-print(data)
-quit()
-test_data = data['test_data']  # Replace 'test_data' with the actual key in your npz file
+
+test_data = data['data']  # Replace 'test_data' with the actual key in your npz file
 
 print(f'Test data shape: {test_data.shape}')
 
