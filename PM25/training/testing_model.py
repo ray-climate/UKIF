@@ -29,7 +29,7 @@ total_patches = n_patches_h * n_patches_w
 print('Number of patches along height:', n_patches_h)
 print('Number of patches along width:', n_patches_w)
 print('Total number of patches:', total_patches)
-quit()
+
 # Load the trained model
 model = load_model('./pm25_model_v2.h5')
 
@@ -47,10 +47,8 @@ pbar = tqdm(total=total_patches, desc='Processing Patches')
 for i in range(n_patches_h):
     for j in range(n_patches_w):
         # Extract the patch
-        patch = data[i*patch_height:(i+1)*patch_height, j*patch_width:(j+1)*patch_width, :]
-        # Ensure the patch shape is correct
-        if patch.shape != (128, 128, 13):
-            continue  # Skip incomplete patches at the edges
+        patch = data[:, i * patch_height:(i + 1) * patch_height, j * patch_width:(j + 1) * patch_width]
+        patch = np.transpose(patch, (1, 2, 0))
         # Append to batch
         batch_patches.append(patch)
         batch_indices.append((i, j))
@@ -67,6 +65,7 @@ for i in range(n_patches_h):
             # Reset batch
             batch_patches = []
             batch_indices = []
+
 # Process remaining patches
 if len(batch_patches) > 0:
     batch_patches_array = np.array(batch_patches)
