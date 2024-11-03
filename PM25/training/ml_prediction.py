@@ -25,6 +25,8 @@ test_data_folder = './data_preparation/testing_data_all_2018'
 # Get list of .npz files
 npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npz')]
 
+print(f'Found {len(npz_files)} .npz files in the folder')
+quit()
 # Iterate over each file and make predictions
 i = 0
 for file in npz_files:
