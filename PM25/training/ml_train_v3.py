@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename:    ml_train_v2.py
+# @Filename:    ml_train_v3.py
 # @Author:      Dr. Rui Song
 # @Email:       rui.song@physics.ox.ac.uk
-# @Time:        01/11/2024 16:39
+# @Time:        03/11/2024 17:49
 
 import numpy as np
 import os
@@ -18,7 +18,7 @@ import tensorflow as tf
 import json  # Add this line to import json module
 
 # Define the data folder
-data_folder = './data_preparation/training_data'
+data_folder = './data_preparation/training_data_all_2018'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 
@@ -84,10 +84,10 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='mse', metrics=['mae'])
 
 # Train the model
 history = model.fit(train_generator, validation_data=val_generator, epochs=100)
-model.save('./pm25_model_v2.h5')
+model.save('./pm25_model_v3.h5')
 
 # Save training history to a JSON file
-with open('training_history_v2.json', 'w') as f:
+with open('training_history_v3.json', 'w') as f:
     json.dump(history.history, f)
 
 # Plot training and validation loss
@@ -98,7 +98,7 @@ plt.legend()
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Training and Validation Loss')
-plt.savefig(os.path.join(output_fig, 'training_validation_loss.png'))
+plt.savefig(os.path.join(output_fig, 'training_validation_loss_v3.png'))
 
 # Evaluate the model on validation data
 val_true = []
@@ -120,10 +120,10 @@ print(f'Validation RMSE: {rmse}')
 print(f'Validation MAE: {mae}')
 
 # Plot predicted vs true PM2.5 values
-plt.figure()
+plt.figure(figsize=(12, 12))
 plt.scatter(val_true, val_pred, alpha=0.5)
-plt.xlabel('True PM2.5')
-plt.ylabel('Predicted PM2.5')
-plt.title('Predicted vs True PM2.5')
+plt.xlabel('True PM2.5', fontsize=14)
+plt.ylabel('Predicted PM2.5', fontsize=14)
+plt.title('Predicted vs True PM2.5', fontsize=16)
 plt.plot([val_true.min(), val_true.max()], [val_true.min(), val_true.max()], 'r--')
-plt.savefig(os.path.join(output_fig, 'predicted_vs_true.png'))
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_v3.png'))
