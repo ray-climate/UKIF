@@ -21,10 +21,11 @@ patch_width = 128
 channels = 13
 
 # Compute the number of patches
-n_patches_h = data.shape[0] // patch_height
-n_patches_w = data.shape[1] // patch_width
+n_patches_h = data.shape[1] // patch_height
+n_patches_w = data.shape[2] // patch_width
 
 total_patches = n_patches_h * n_patches_w
+
 print('Number of patches along height:', n_patches_h)
 print('Number of patches along width:', n_patches_w)
 print('Total number of patches:', total_patches)
