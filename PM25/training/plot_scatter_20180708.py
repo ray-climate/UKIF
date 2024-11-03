@@ -10,7 +10,7 @@ import os
 import matplotlib.pyplot as plt
 
 # Define the data folder for testing data
-test_data_folder = './data_preparation/training_data_all_2018_testing'
+test_data_folder = './data_preparation/testing_data_all_2018'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 
