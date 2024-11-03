@@ -26,6 +26,7 @@ test_data_folder = './data_preparation/testing_data_all_2018'
 npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npz')]
 
 # Iterate over each file and make predictions
+i = 0
 for file in npz_files:
     # Load the data
     data = np.load(file)
@@ -50,4 +51,5 @@ for file in npz_files:
 
     # Save the data back to the same file (overwrite)
     np.savez(file, **data_dict)
-    print(f'Predicted PM2.5 for {file}: {predicted_pm25}')
+    print(f'Predicted the {i}th patch with PM2.5 value of {predicted_pm25}')
+    i += 1
