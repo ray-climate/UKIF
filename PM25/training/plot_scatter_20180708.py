@@ -44,6 +44,8 @@ plt.xlabel('True PM2.5', fontsize=14)
 plt.ylabel('Predicted PM2.5', fontsize=14)
 plt.title('Predicted vs True PM2.5 (Testing Data)', fontsize=16)
 plt.plot([pm25_true.min(), pm25_true.max()], [pm25_true.min(), pm25_true.max()], 'r--', linewidth=2)
+plt.xlim([0, 30])
+plt.ylim([0, 30])
 plt.grid(True)
 plt.savefig(os.path.join(output_fig, 'predicted_vs_true_testing_v3_20180807.png'))
 
