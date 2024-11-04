@@ -9,4 +9,4 @@
 #SBATCH --mem=16000
 
 echo "Processing date: $date_i"
-python prepare_training_patch.py $date_i
+python prepare_training_patch_i.py $date_i
