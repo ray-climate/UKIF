@@ -78,6 +78,7 @@ for date_i in date_list:
 
             # Get pixel coordinates
             px, py = latlon_to_pixel(lat, lon, transform)
+            print(px, py)
 
             # Calculate window boundaries
             half_size = patch_size // 2
