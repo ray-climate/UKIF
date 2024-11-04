@@ -126,7 +126,7 @@ for date_i in date_list:
                 print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}% -------------- Cloudy")
         else:
             print(patch.shape)
-            print(f"Patch {total_number} is not 128x128 or PM2.5 value is 0")
+            print(f"Patch {total_number} is not 128x128 or PM2.5 value is 0 {lat_modis_list[i], lon_modis_list[i]}")
 
         total_number += 1
 
