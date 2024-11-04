@@ -118,12 +118,14 @@ for date_i in date_list:
         if patch.shape[1] == 128 and patch.shape[2] == 128 and PM25_list[i] > 0:
             bad_percentage = bad_value_percentage(patch)
             if bad_percentage < 10:  # Save only if bad values are below 10%
-                print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}%")
+                print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}% ------------ Found")
                 save_rgb_quickview(patch, f'date_{date_i}_patch_{total_number}')
                 # Save patch and PM2.5 value into npz file
                 np.savez(f'{savedata_dir}/date_{date_i}_patch_{total_number}.npz', patch=patch, pm25=PM25_list[i])
             else:
-                print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}%")
+                print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}% -------------- Cloudy")
+        else:
+            print(f"Patch {total_number} is not 128x128 or PM2.5 value is 0")
 
         total_number += 1
 
