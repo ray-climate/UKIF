@@ -68,7 +68,7 @@ for date_i in date_list:
 
     def extract_patch(file_path, lat, lon, patch_size=128):
         """
-        Extract a patch of size patch_size x patch_size x 12 bands centered at the pixel location corresponding
+        Extract a patch of size patch_size x patch_size x 13 bands centered at the pixel location corresponding
         to the given latitude and longitude.
         """
         # Open the raster file
@@ -86,6 +86,7 @@ for date_i in date_list:
             # Calculate window boundaries
             half_size = patch_size // 2
             window = Window(px - half_size, py - half_size, patch_size, patch_size)
+            print(window)
 
             # Read the window for all 12 bands
             patch = src.read(window=window)
