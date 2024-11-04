@@ -90,6 +90,7 @@ for date_i in date_list:
 
             # Read the window for all 12 bands
             patch = src.read(window=window)
+            print(patch.shape)
 
         return patch
 
