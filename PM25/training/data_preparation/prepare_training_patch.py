@@ -81,8 +81,7 @@ for date_i in date_list:
 
             # Calculate window boundaries
             half_size = patch_size // 2
-            window = Window(px - half_size, py - half_size, patch_size, patch_size)
-
+            window = Window(py - half_size, px - half_size, patch_size, patch_size)
             # Read the window for all 12 bands
             patch = src.read(window=window)
 
@@ -126,5 +125,3 @@ for date_i in date_list:
                 print(f"Date {date_i} Patch {total_number} has bad value percentage: {bad_percentage:.2f}%")
 
         total_number += 1
-
-# test
