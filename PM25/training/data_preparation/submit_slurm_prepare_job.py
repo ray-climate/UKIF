@@ -18,6 +18,5 @@ for file in os.listdir(MODIS_dir):
 
 date_list = sorted(set(date_list))
 
-
 for date in date_list:
     print(date)
