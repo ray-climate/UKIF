@@ -15,8 +15,8 @@ import os
 MODIS_dir = './modis_pm25_data_crop_testing'
 Sentinel_data = './S2_London_2018'
 
-savefig_dir = './testing_figs_all_2018'
-savedata_dir = './testing_data_all_2018'
+savefig_dir = './testing_figs_all_2018_rotate'
+savedata_dir = './testing_data_all_2018_rotate'
 
 os.makedirs(savefig_dir, exist_ok=True)
 os.makedirs(savedata_dir, exist_ok=True)
@@ -85,7 +85,7 @@ for date_i in date_list:
 
             # Calculate window boundaries
             half_size = patch_size // 2
-            window = Window(px - half_size, py - half_size, patch_size, patch_size)
+            window = Window(py - half_size,px - half_size, patch_size, patch_size)
             print(window)
 
             # Read the window for all 12 bands
