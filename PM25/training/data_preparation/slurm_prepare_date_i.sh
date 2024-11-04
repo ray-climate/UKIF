@@ -8,6 +8,5 @@
 #SBATCH --time=24:00:00
 #SBATCH --mem=16000
 
-$date_i=$1
-echo "Processing date: $date_i"
-python prepare_training_patch_i.py $date_i
+echo "Processing date: $1"
+python prepare_training_patch_i.py $1
