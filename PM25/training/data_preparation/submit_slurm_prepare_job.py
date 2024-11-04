@@ -20,4 +20,4 @@ date_list = sorted(set(date_list))
 
 for date in date_list:
     print(date)
-    os.sysmtem(f'sbatch slurm_prepare_date_i.sh {date}')
+    os.system(f'sbatch slurm_prepare_date_i.sh {date}')
