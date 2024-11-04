@@ -78,7 +78,9 @@ for date_i in date_list:
 
             # Get pixel coordinates
             px, py = latlon_to_pixel(lat, lon, transform)
-            print(px, py)
+            # get the shape of the image
+            shape = src.shape
+            print(shape)
 
             # Calculate window boundaries
             half_size = patch_size // 2
