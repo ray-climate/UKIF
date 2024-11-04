@@ -81,6 +81,7 @@ for date_i in date_list:
             # get the shape of the image
             shape = src.shape
             print(shape)
+            print(px, py)
 
             # Calculate window boundaries
             half_size = patch_size // 2
