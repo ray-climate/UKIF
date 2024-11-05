@@ -39,7 +39,7 @@ pm25_predicted = np.array(pm25_predicted)
 
 # Create density plot
 plt.figure(figsize=(15, 12))
-plt.hexbin(pm25_true, pm25_predicted, gridsize=50, cmap='RdBu_r')
+plt.hexbin(pm25_true, pm25_predicted, gridsize=50, cmap='Reds', edgecolors='none')
 plt.colorbar(extend='max', aspect=20, fraction=0.03, pad=0.03)
 plt.xlabel('True PM2.5 [µg/m³]', fontsize=18)
 plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
