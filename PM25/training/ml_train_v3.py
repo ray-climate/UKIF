@@ -87,7 +87,7 @@ history = model.fit(train_generator, validation_data=val_generator, epochs=100)
 model.save('./pm25_model_v4.h5')
 
 # Save training history to a JSON file
-with open('training_history_v3.json', 'w') as f:
+with open('training_history_v4.json', 'w') as f:
     json.dump(history.history, f)
 
 # Plot training and validation loss
