@@ -58,7 +58,6 @@ for date_i in date_list:
             lon_modis_list.append(lon_modis_array[j])
             PM25_list.append(pm25_array[i, j])
 
-
     def latlon_to_pixel(lat, lon, transform):
         """
         Convert latitude and longitude to pixel coordinates in the image.
@@ -80,17 +79,12 @@ for date_i in date_list:
             px, py = latlon_to_pixel(lat, lon, transform)
             # get the shape of the image
             shape = src.shape
-            print(shape)
-            print(px, py)
 
             # Calculate window boundaries
             half_size = patch_size // 2
             window = Window(py - half_size,px - half_size, patch_size, patch_size)
-            print(window)
-
             # Read the window for all 12 bands
             patch = src.read(window=window)
-            print(patch.shape)
 
         return patch
 
