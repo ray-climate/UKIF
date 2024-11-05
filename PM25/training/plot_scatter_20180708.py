@@ -1,6 +1,5 @@
-#!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename:    plot_density_20180708.py
+# @Filename:    plot_scatter_20180708.py
 # @Author:      Dr. Rui Song
 # @Email:       rui.song@physics.ox.ac.uk
 # @Time:        03/11/2024 22:27
@@ -37,21 +36,21 @@ for file in npz_files:
 pm25_true = np.array(pm25_true)
 pm25_predicted = np.array(pm25_predicted)
 
-# Create density plot
-plt.figure(figsize=(15, 12))
-plt.hexbin(pm25_true, pm25_predicted, gridsize=50, cmap='Reds', edgecolors='none')
-plt.colorbar(extend='max', aspect=20, fraction=0.03, pad=0.03)
+# Create scatter plot
+plt.figure(figsize=(12, 12))
+plt.scatter(pm25_true, pm25_predicted, alpha=0.5)
 plt.xlabel('True PM2.5 [µg/m³]', fontsize=18)
 plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
-plt.title('Density Plot: Predicted vs True PM2.5 (Testing Data)', fontsize=18)
+plt.title('Predicted vs True PM2.5 (Testing Data)', fontsize=18)
 plt.plot([0, 50], [0, 50], 'r--', linewidth=2)
 plt.xlim([0, 50])
 plt.ylim([0, 50])
-# Increase x and y ticks font size
+# increase x and y ticks font size
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
-plt.grid(True, linestyle='--', alpha=0.5)
-plt.savefig(os.path.join(output_fig, 'density_predicted_vs_true_testing_v4_20180807.png'))
+plt.grid(True)
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_testing_v4_20180807.png'))
 
 # Optionally, display the plot
 # plt.show()
+"
