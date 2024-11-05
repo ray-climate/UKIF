@@ -10,7 +10,7 @@ import os
 import matplotlib.pyplot as plt
 
 # Define the data folder for testing data
-test_data_folder = './data_preparation/testing_data_all_2018'
+test_data_folder = './data_preparation/testing_data_all_2018_rotate'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 
@@ -47,7 +47,7 @@ plt.plot([pm25_true.min(), pm25_true.max()], [pm25_true.min(), pm25_true.max()],
 plt.xlim([0, 30])
 plt.ylim([0, 30])
 plt.grid(True)
-plt.savefig(os.path.join(output_fig, 'predicted_vs_true_testing_v3_20180807.png'))
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_testing_v4_20180807.png'))
 
 # Optionally, display the plot
 # plt.show()
