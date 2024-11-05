@@ -53,4 +53,3 @@ plt.savefig(os.path.join(output_fig, 'predicted_vs_true_testing_v4_20180807.png'
 
 # Optionally, display the plot
 # plt.show()
-"
