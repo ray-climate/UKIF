@@ -15,8 +15,8 @@ import os
 MODIS_dir = './modis_pm25_data_crop_testing'
 Sentinel_data = './S2_London_2018'
 
-savefig_dir = './testing_figs_all_2018'
-savedata_dir = './testing_data_all_2018'
+savefig_dir = './testing_data_all_2018_rotate'
+savedata_dir = './testing_data_all_2018_rotate'
 
 os.makedirs(savefig_dir, exist_ok=True)
 os.makedirs(savedata_dir, exist_ok=True)
