@@ -18,7 +18,7 @@ import tensorflow as tf
 import json  # Add this line to import json module
 
 # Define the data folder
-data_folder = './data_preparation/training_data_all_2018'
+data_folder = './data_preparation/training_data_all_2018_rotate'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 
@@ -84,7 +84,7 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='mse', metrics=['mae'])
 
 # Train the model
 history = model.fit(train_generator, validation_data=val_generator, epochs=100)
-model.save('./pm25_model_v3.h5')
+model.save('./pm25_model_v4.h5')
 
 # Save training history to a JSON file
 with open('training_history_v3.json', 'w') as f:
@@ -98,7 +98,7 @@ plt.legend()
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Training and Validation Loss')
-plt.savefig(os.path.join(output_fig, 'training_validation_loss_v3.png'))
+plt.savefig(os.path.join(output_fig, 'training_validation_loss_v4.png'))
 
 # Evaluate the model on validation data
 val_true = []
@@ -122,8 +122,8 @@ print(f'Validation MAE: {mae}')
 # Plot predicted vs true PM2.5 values
 plt.figure(figsize=(12, 12))
 plt.scatter(val_true, val_pred, alpha=0.5)
-plt.xlabel('True PM2.5', fontsize=14)
-plt.ylabel('Predicted PM2.5', fontsize=14)
-plt.title('Predicted vs True PM2.5', fontsize=16)
+plt.xlabel('True PM2.5 [µg/m³]', fontsize=18)
+plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
+plt.title('Predicted vs True PM2.5', fontsize=18)
 plt.plot([val_true.min(), val_true.max()], [val_true.min(), val_true.max()], 'r--')
-plt.savefig(os.path.join(output_fig, 'predicted_vs_true_v3.png'))
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_v4.png'))
