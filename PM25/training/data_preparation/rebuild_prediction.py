@@ -59,7 +59,6 @@ for date_i in date_list:
             PM25_list.append(pm25_array[i, j])
             PM25_predicted_list.append(np.nan)
 
-
     total_number = 0
 
     for i in range(len(lat_modis_list)):
@@ -72,6 +71,7 @@ for date_i in date_list:
 
     # convert list to array
     PM25_predicted_array = np.array(PM25_predicted_list).reshape(pm25_array.shape)
+    PM25_array = np.array(PM25_list).reshape(pm25_array.shape)
 
     # Save the predicted PM2.5 array with lat and lon as NetCDF file
     output_file = (f'PM25_predicted_{date_i}.nc')
@@ -85,17 +85,21 @@ for date_i in date_list:
         latitudes = ncfile.createVariable('lat', np.float32, ('lat',))
         longitudes = ncfile.createVariable('lon', np.float32, ('lon',))
         pm25_predicted = ncfile.createVariable('PM25_predicted', np.float32, ('lat', 'lon'), fill_value=np.nan)
+        pm25_true = ncfile.createVariable('PM25_true', np.float32, ('lat', 'lon'), fill_value=np.nan)
 
         # Assign data to variables
         latitudes[:] = lat_modis_array
         longitudes[:] = lon_modis_array
         pm25_predicted[:, :] = PM25_predicted_array
+        pm25_true[:, :] = PM25_array
 
         # Add attributes
         latitudes.units = 'degrees_north'
         longitudes.units = 'degrees_east'
         pm25_predicted.units = 'µg/m³'
         pm25_predicted.description = 'Predicted PM2.5 concentrations'
+        pm25_true.units = 'µg/m³'
+        pm25_true.description = 'True PM2.5 concentrations'
 
         # Global attributes
         ncfile.title = f'Predicted PM2.5 Data for {date_i}'
