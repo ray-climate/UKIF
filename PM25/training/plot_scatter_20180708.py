@@ -38,7 +38,7 @@ pm25_predicted = np.array(pm25_predicted)
 
 # Create scatter plot
 plt.figure(figsize=(12, 12))
-plt.scatter(pm25_true, pm25_predicted, alpha=0.5, s=50)
+plt.scatter(pm25_true, pm25_predicted, alpha=0.5, s=10)
 plt.xlabel('True PM2.5 [µg/m³]', fontsize=18)
 plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
 plt.title('Predicted vs True PM2.5 (Testing Data)', fontsize=18)
