@@ -20,7 +20,7 @@ import tensorflow as tf
 model = tf.keras.models.load_model('./pm25_model_v3.h5')
 
 # Define the data folder for testing data
-test_data_folder = './data_preparation/testing_data_all_2018'
+test_data_folder = './data_preparation/testing_data_all_2018_rotate'
 
 # Get list of .npz files
 npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npz')]
