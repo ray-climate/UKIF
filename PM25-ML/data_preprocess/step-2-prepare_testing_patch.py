@@ -12,7 +12,7 @@ import numpy as np
 import rasterio
 import os
 
-MODIS_dir = './modis_pm25_data_reproject_crop'
+MODIS_dir = './modis_pm25_data_reproject_crop_testing'
 Sentinel_data = './S2L1C_London_testing'
 
 savefig_dir = './testing_figs_2018-2020'
