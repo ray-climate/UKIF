@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the input and output directories
-input_dir="./S2_London"
-output_dir="./S2_London_thumbview"
+input_dir="./S2L1C_London"
+output_dir="./S2L1C_London_thumbview"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_dir"
