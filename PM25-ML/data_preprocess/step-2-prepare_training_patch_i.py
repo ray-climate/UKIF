@@ -13,11 +13,11 @@ import rasterio
 import sys
 import os
 
-MODIS_dir = './modis_pm25_data_crop'
-Sentinel_data = './S2_London_2018'
+MODIS_dir = './modis_pm25_data_reproject_crop'
+Sentinel_data = './S2L1C_London'
 
-savefig_dir = './training_figs_all_2018_rotate'
-savedata_dir = './training_data_all_2018_rotate'
+savefig_dir = './training_figs_2018-2020'
+savedata_dir = './training_data_2018-2020'
 
 os.makedirs(savefig_dir, exist_ok=True)
 os.makedirs(savedata_dir, exist_ok=True)
