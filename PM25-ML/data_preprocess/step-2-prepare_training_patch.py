@@ -28,8 +28,7 @@ for file in os.listdir(MODIS_dir):
         YYYYMMDD = file.split('_')[3]
         date_list.append(YYYYMMDD)
 
-print(date_list)
-quit()
+
 for date_i in date_list:
 
     MODIS_file = os.path.join(MODIS_dir, f'GHAP_PM2.5_D1K_{date_i}_V1_cropped_projected.nc')
