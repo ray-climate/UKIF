@@ -18,7 +18,7 @@ import tensorflow as tf
 import json  # Add this line to import json module
 
 # Define the data folder
-data_folder = './data_preprocess/modis_pm25_data_crop'
+data_folder = './data_preprocess/training_data_2018-2020'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 version = 'v0'
