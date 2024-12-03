@@ -5,23 +5,23 @@
 # @Email:       rui.song@physics.ox.ac.uk
 # @Time:        03/11/2024 17:49
 
-import numpy as np
-import os
+from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, MaxPooling2D
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.model_selection import train_test_split
+import json  # Add this line to import json module
+from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, MaxPooling2D
-from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, mean_absolute_error
 import tensorflow as tf
-import json  # Add this line to import json module
+import numpy as np
+import os
 
 # Define the data folder
 data_folder = './data_preprocess/training_data_2018-2020'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
-version = 'v0'
+version = 'v0-1'
 
 # Get list of .npz files
 npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npz')]

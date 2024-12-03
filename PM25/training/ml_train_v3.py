@@ -22,6 +22,7 @@ data_folder = './data_preparation/training_data_all_2018_rotate'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
 
+
 # Get list of .npz files
 npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npz')]
 
