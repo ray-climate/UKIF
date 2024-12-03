@@ -30,7 +30,7 @@ print(len(npz_files))
 # randon keep 50% of the data
 npz_files = np.random.choice(npz_files, int(len(npz_files) * 0.5), replace=False)
 print(len(npz_files))
-quit()
+
 # Split the data into training and validation sets
 train_files, val_files = train_test_split(npz_files, test_size=0.2, random_state=42)
 
