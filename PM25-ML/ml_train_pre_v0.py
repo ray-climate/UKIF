@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename:    ml_train_v1.py
+# @Filename:    ml_train_pre_v0.py
 # @Author:      Dr. Rui Song
 # @Email:       rui.song@physics.ox.ac.uk
-# @Time:        03/12/2024 10:55
+# @Time:        04/12/2024 11:57
 
 import numpy as np
 import os
@@ -22,17 +22,23 @@ import json  # Add this line to import json module
 data_folder = './data_preprocess/training_data_2018-2020'
 output_fig = './training_history_figs'
 os.makedirs(output_fig, exist_ok=True)
-version = 'v3'
+version = 'pre_v0'
 
 # Get list of .npz files
 npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npz')]
-print(len(npz_files))
-# randon keep 50% of the data
-npz_files = np.random.choice(npz_files, int(len(npz_files) * 0.5), replace=False)
-print(len(npz_files))
+print(f"Total .npz files: {len(npz_files)}")
 
-# Split the data into training and validation sets
-train_files, val_files = train_test_split(npz_files, test_size=0.2, random_state=42)
+# Randomly keep 50% of the data
+npz_files = np.random.choice(npz_files, int(len(npz_files) * 0.2), replace=False)
+print(f"Files after random selection: {len(npz_files)}")
+
+# Split the data into training, validation, and test sets
+train_files, temp_files = train_test_split(npz_files, test_size=0.3, random_state=42)
+val_files, test_files = train_test_split(temp_files, test_size=(1/3), random_state=42)
+
+print(f"Training files: {len(train_files)}")
+print(f"Validation files: {len(val_files)}")
+print(f"Test files: {len(test_files)}")
 
 # Define the data generator
 class DataGenerator(Sequence):
@@ -70,6 +76,7 @@ class DataGenerator(Sequence):
 batch_size = 32
 train_generator = DataGenerator(train_files, batch_size=batch_size, shuffle=True)
 val_generator = DataGenerator(val_files, batch_size=batch_size, shuffle=False)
+test_generator = DataGenerator(test_files, batch_size=batch_size, shuffle=False)
 
 # Build the CNN model
 input_shape = (128, 128, 13)
@@ -120,21 +127,52 @@ for X_batch, y_batch in val_generator:
 val_true = np.array(val_true)
 val_pred = np.array(val_pred)
 
-# Compute evaluation metrics
-rmse = np.sqrt(mean_squared_error(val_true, val_pred))
-mae = mean_absolute_error(val_true, val_pred)
+# Compute evaluation metrics for validation data
+val_rmse = np.sqrt(mean_squared_error(val_true, val_pred))
+val_mae = mean_absolute_error(val_true, val_pred)
 
-print(f'Validation RMSE: {rmse}')
-print(f'Validation MAE: {mae}')
+print(f'Validation RMSE: {val_rmse}')
+print(f'Validation MAE: {val_mae}')
 
-# Plot predicted vs true PM2.5 values
+# Evaluate the model on test data
+test_true = []
+test_pred = []
+
+for X_batch, y_batch in test_generator:
+    y_pred_batch = model.predict(X_batch)
+    test_true.extend(y_batch)
+    test_pred.extend(y_pred_batch.flatten())
+
+test_true = np.array(test_true)
+test_pred = np.array(test_pred)
+
+# Compute evaluation metrics for test data
+test_rmse = np.sqrt(mean_squared_error(test_true, test_pred))
+test_mae = mean_absolute_error(test_true, test_pred)
+
+print(f'Test RMSE: {test_rmse}')
+print(f'Test MAE: {test_mae}')
+
+# Plot predicted vs true PM2.5 values for validation data with density colors
 plt.figure(figsize=(12, 12))
-plt.scatter(val_true, val_pred, alpha=0.5)
+plt.hexbin(val_true, val_pred, gridsize=50, bins='log', cmap='RdBu_r')
+plt.colorbar(label='log10(N)')
 plt.xlabel('MODIS PM2.5 [µg/m³]', fontsize=18)
 plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
-# set x-tick and y-tick font size
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
-plt.title('Predicted vs True PM2.5', fontsize=18)
+plt.title('Predicted vs True PM2.5 (Validation Data)', fontsize=18)
 plt.plot([val_true.min(), val_true.max()], [val_true.min(), val_true.max()], 'r--')
-plt.savefig(os.path.join(output_fig, 'predicted_vs_true_%s.png' % version))
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_density_val_%s.png' % version))
+
+# Plot predicted vs true PM2.5 values for test data with density colors
+plt.figure(figsize=(12, 12))
+plt.hexbin(test_true, test_pred, gridsize=50, bins='log', cmap='RdBu_r')
+plt.colorbar(label='log10(N)')
+plt.xlabel('MODIS PM2.5 [µg/m³]', fontsize=18)
+plt.ylabel('Predicted PM2.5 [µg/m³]', fontsize=18)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.title('Predicted vs True PM2.5 (Test Data)', fontsize=18)
+plt.plot([test_true.min(), test_true.max()], [test_true.min(), test_true.max()], 'r--')
+plt.savefig(os.path.join(output_fig, 'predicted_vs_true_density_test_%s.png' % version))
