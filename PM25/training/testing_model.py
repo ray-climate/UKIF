@@ -13,8 +13,7 @@ from tqdm import tqdm  # For progress bar
 data = np.load('./data_preparation/testing_data/Sentinel2_L1C_20180807_CloudMasked.npz')['data']  # Replace 'your_array' with the actual key in your npz file
 
 # Ensure data has shape (5443, 10122, 13)
-print('Data shape:', data.shape)
-quit()
+
 # Define the patch size
 patch_height = 128
 patch_width = 128

@@ -1,4 +1,3 @@
-from matplotlib.pyplot import savefig
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    crop_sentinel2_l1c_from_with_MODIS_PM25.py
