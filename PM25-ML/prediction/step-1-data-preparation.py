@@ -30,3 +30,10 @@ pixel_y = max(0, min(raster_y_size - 1, pixel_y))
 
 print(f"Closest pixel index to lat/lon ({target_lat}, {target_lon}):")
 print(f"X: {pixel_x}, Y: {pixel_y}")
+# print the lat lon of 4 adjacent pixels
+print(f"Lat/Lon of the 4 adjacent pixels:")
+print(f"Top left: {gdal.ApplyGeoTransform(geotransform, pixel_x, pixel_y)}")
+print(f"Top right: {gdal.ApplyGeoTransform(geotransform, pixel_x + 1, pixel_y)}")
+print(f"Bottom left: {gdal.ApplyGeoTransform(geotransform, pixel_x, pixel_y + 1)}")
+print(f"Bottom right: {gdal.ApplyGeoTransform(geotransform, pixel_x + 1, pixel_y + 1)}")
+# Close the dataset
