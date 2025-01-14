@@ -9,6 +9,10 @@ from osgeo import gdal
 
 sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
 pm25_data =     '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/modis_pm25_data_reproject_crop/GHAP_PM2.5_D1K_20180807_V1_cropped_projected.nc'
+output_cropped_sentinel_file = './data/Sentinel2_L1C_20180807_CloudMasked_cropped.tif'
+
+crop_width = 500 # pixels
+crop_height = 500 # pixels
 
 sentinel_dataset = gdal.Open(sentinel_data)
 target_lat = 51.518 # top left corner of the selected box
@@ -30,10 +34,43 @@ pixel_y = max(0, min(raster_y_size - 1, pixel_y))
 
 print(f"Closest pixel index to lat/lon ({target_lat}, {target_lon}):")
 print(f"X: {pixel_x}, Y: {pixel_y}")
-# print the lat lon of 4 adjacent pixels
-print(f"Lat/Lon of the 4 adjacent pixels:")
-print(f"Top left: {gdal.ApplyGeoTransform(geotransform, pixel_x, pixel_y)}")
-print(f"Top right: {gdal.ApplyGeoTransform(geotransform, pixel_x + 1, pixel_y)}")
-print(f"Bottom left: {gdal.ApplyGeoTransform(geotransform, pixel_x, pixel_y + 1)}")
-print(f"Bottom right: {gdal.ApplyGeoTransform(geotransform, pixel_x + 1, pixel_y + 1)}")
-# Close the dataset
+
+# Define the cropping box (top-left corner and dimensions)
+crop_x = pixel_x
+crop_y = pixel_y
+crop_x_end = min(crop_x + crop_width, raster_x_size)
+crop_y_end = min(crop_y + crop_height, raster_y_size)
+
+# Read the data from the cropping region
+cropped_data = sentinel_dataset.ReadAsArray(crop_x, crop_y, crop_x_end - crop_x, crop_y_end - crop_y)
+if cropped_data is None:
+    raise ValueError("Failed to read the cropped data from the Sentinel dataset.")
+
+# Create a new GeoTIFF file for the cropped data
+driver = gdal.GetDriverByName('GTiff')
+out_raster = driver.Create(output_cropped_sentinel_file, crop_x_end - crop_x, crop_y_end - crop_y,
+                           sentinel_dataset.RasterCount, sentinel_dataset.GetRasterBand(1).DataType)
+
+# Set the geotransform and projection for the cropped raster
+new_geotransform = (
+    origin_x + crop_x * pixel_width,
+    pixel_width,
+    0,
+    origin_y + crop_y * pixel_height,
+    0,
+    pixel_height
+)
+out_raster.SetGeoTransform(new_geotransform)
+out_raster.SetProjection(sentinel_dataset.GetProjection())
+
+# Write the cropped data to the new file
+for band in range(1, sentinel_dataset.RasterCount + 1):
+    out_band = out_raster.GetRasterBand(band)
+    out_band.WriteArray(cropped_data[band - 1])
+
+# Close datasets
+out_raster.FlushCache()
+del out_raster
+sentinel_dataset = None
+
+print(f"Cropped raster saved to: {output_cropped_sentinel_file}")
