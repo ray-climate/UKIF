@@ -139,6 +139,7 @@ def extract_patch(file_path, index_x, index_y, patch_size=128):
         # Calculate window boundaries
         half_size = patch_size // 2
         window = Window(py - half_size, px - half_size, patch_size, patch_size)
+        print(window)
         # Read the window for all 12 bands
         patch = src.read(window=window)
         print(patch.shape)
