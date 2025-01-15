@@ -12,4 +12,4 @@
 mkdir -p logs-step1
 
 # Your script execution
-python process_chunk.py ${SLURM_ARRAY_TASK_ID} 100
+python step-1.5-acceleration.py ${SLURM_ARRAY_TASK_ID} 100
