@@ -33,9 +33,7 @@ print(f"Raster size: {raster_x_size} x {raster_y_size}")
 # Calculate pixel coordinates for the given latitude and longitude
 pixel_x = int((target_lon - origin_x) / pixel_width)
 pixel_y = int((target_lat - origin_y) / pixel_height)
-pixel_y = int((origin_y - target_lat) / abs(pixel_height))
-print(pixel_y)
-quit()
+
 # Ensure the coordinates are within the raster bounds
 pixel_x = max(0, min(raster_x_size - 1, pixel_x))
 pixel_y = max(0, min(raster_y_size - 1, pixel_y))
@@ -71,7 +69,7 @@ with rasterio.open(sentinel_data) as src:
     # Update the metadata for the new file
     meta.update({
         'driver': 'GTiff',
-        'height': crop_height,
+        'height': -crop_height,
         'width': crop_width,
         'count': 1,  # Single band for PM2.5
         'dtype': 'float32',
