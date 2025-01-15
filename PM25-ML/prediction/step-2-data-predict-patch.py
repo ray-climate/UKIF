@@ -16,5 +16,5 @@ model = tf.keras.models.load_model('./pm25_model_pre_v0.h5')
 test_data_folder = './prediction/data_patch'
 
 # Get list of .npz files
-npz_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npz')]
-print(f"Total .npz files: {len(npz_files)}")
+npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npz')]
+print(f'Found {len(npz_files)} .npz files in the folder')
