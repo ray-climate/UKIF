@@ -30,7 +30,7 @@ end_idx = int(sys.argv[2])
 for i, file in enumerate(npz_files[start_idx:end_idx]):
     # Load the data
     data = np.load(file)
-    print(data.shape)
+    print(file, data.shape)
     patch = np.transpose(data, (1, 2, 0))  # Shape becomes (128, 128, 13)
     patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
 
