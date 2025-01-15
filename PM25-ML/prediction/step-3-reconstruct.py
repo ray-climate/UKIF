@@ -33,7 +33,8 @@ print(f"Raster size: {raster_x_size} x {raster_y_size}")
 # Calculate pixel coordinates for the given latitude and longitude
 pixel_x = int((target_lon - origin_x) / pixel_width)
 pixel_y = int((target_lat - origin_y) / pixel_height)
-
+print(pixel_height)
+quit()
 # Ensure the coordinates are within the raster bounds
 pixel_x = max(0, min(raster_x_size - 1, pixel_x))
 pixel_y = max(0, min(raster_y_size - 1, pixel_y))
@@ -48,8 +49,7 @@ crop_x_end = min(crop_x + crop_width, raster_x_size)
 crop_y_end = min(crop_y + crop_height, raster_y_size)
 
 predicted_pm25_array = np.zeros((crop_height, crop_width))
-print(crop_y, crop_y_end)
-quit()
+
 for row in range(crop_y, crop_y_end):
     # for col in range(crop_x, crop_x_end):
     for col in range(5011, 5015):
