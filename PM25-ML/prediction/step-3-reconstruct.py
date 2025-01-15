@@ -60,7 +60,8 @@ for row in range(crop_y, crop_y_end):
         predicted_pm25 = data_dict['pm25_predicted']
         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
         predicted_pm25_array[row - crop_y, col - crop_x] = predicted_pm25
-
+print(pixel_height)
+quit()
 # Create the output GeoTIFF file
 with rasterio.open(sentinel_data) as src:
     # Get the metadata from the source file
