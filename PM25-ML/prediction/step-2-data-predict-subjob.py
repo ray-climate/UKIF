@@ -38,7 +38,8 @@ for i, file in enumerate(npz_files[start_idx:end_idx]):
     predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
     print(predicted_pm25)
 
-    data_dict = dict(data)
+
+    data_dict = {"patch": data}
     data_dict['pm25_predicted'] = predicted_pm25
     data_dict['patch'] = patch
 
