@@ -6,6 +6,7 @@
 # @Time:        14/01/2025 17:53
 
 from osgeo import gdal
+import os
 
 sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
 pm25_data =     '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/modis_pm25_data_reproject_crop/GHAP_PM2.5_D1K_20180807_V1_cropped_projected.nc'
@@ -74,3 +75,26 @@ del out_raster
 sentinel_dataset = None
 
 print(f"Cropped raster saved to: {output_cropped_sentinel_file}")
+
+#-----------------------------------------------------------------
+# reproject MODIS PM2.5
+# Define the output file for the reprojected PM2.5 data
+reprojected_pm25_file = './data/PM25_20180807_reprojected.nc'
+
+# Use gdalwarp to reproject the PM2.5 data
+gdalwarp_command = [
+    'gdalwarp',
+    '-t_srs', f'"{gdal.Info(output_cropped_sentinel_file, options=["-proj4"])}"',  # Match the target projection
+    '-te',
+    f'{new_geotransform[0]}',  # xmin
+    f'{new_geotransform[3] + (crop_y_end - crop_y) * pixel_height}',  # ymin
+    f'{new_geotransform[0] + (crop_x_end - crop_x) * pixel_width}',  # xmax
+    f'{new_geotransform[3]}',  # ymax
+    '-tr', f'{pixel_width}', f'{abs(pixel_height)}',  # Target resolution
+    pm25_data,
+    reprojected_pm25_file
+]
+
+# Execute the gdalwarp command
+print("Running gdalwarp for reprojecting PM2.5 data...")
+os.system(' '.join(gdalwarp_command))
