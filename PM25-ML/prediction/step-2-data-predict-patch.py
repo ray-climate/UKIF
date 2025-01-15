@@ -18,3 +18,13 @@ test_data_folder = './data_patch'
 # Get list of .npz files
 npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npy')]
 print(f'Found {len(npz_files)} .npz files in the folder')
+
+# Iterate over each file and make predictions
+i = 0
+for file in npz_files:
+    # Load the data
+    data = np.load(file)
+    print(data)
+    # # Get the patch
+    # patch = data['patch'].astype(np.float32)  # Convert to float32
+    quit()
