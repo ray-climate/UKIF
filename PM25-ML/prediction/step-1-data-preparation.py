@@ -81,20 +81,24 @@ print(f"Cropped raster saved to: {output_cropped_sentinel_file}")
 # Define the output file for the reprojected PM2.5 data
 reprojected_pm25_file = './data/PM25_20180807_reprojected.nc'
 
+# Get the projection and extent from the cropped Sentinel file
+output_sentinel_projection = gdal.Info(output_cropped_sentinel_file, options=["-proj4"]).strip()
+output_sentinel_extent = gdal.Info(output_cropped_sentinel_file, options=["-json"])
+extent = output_sentinel_extent['cornerCoordinates']
+
+xmin, ymin = extent['lowerLeft']
+xmax, ymax = extent['upperRight']
+
 # Use gdalwarp to reproject the PM2.5 data
 gdalwarp_command = [
     'gdalwarp',
-    '-t_srs', f'"{gdal.Info(output_cropped_sentinel_file, options=["-proj4"])}"',  # Match the target projection
-    '-te',
-    f'{new_geotransform[0]}',  # xmin
-    f'{new_geotransform[3] + (crop_y_end - crop_y) * pixel_height}',  # ymin
-    f'{new_geotransform[0] + (crop_x_end - crop_x) * pixel_width}',  # xmax
-    f'{new_geotransform[3]}',  # ymax
-    '-tr', f'{pixel_width}', f'{abs(pixel_height)}',  # Target resolution
+    '-t_srs', output_sentinel_projection,  # Match the target projection
+    '-te', str(xmin), str(ymin), str(xmax), str(ymax),  # Match the target extent
+    '-tr', str(pixel_width), str(abs(pixel_height)),  # Match the target resolution
     pm25_data,
     reprojected_pm25_file
 ]
-print(gdalwarp_command)
+
 # Execute the gdalwarp command
 print("Running gdalwarp for reprojecting PM2.5 data...")
 os.system(' '.join(gdalwarp_command))
