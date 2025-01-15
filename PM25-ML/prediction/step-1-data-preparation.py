@@ -29,7 +29,7 @@ origin_x, pixel_width, _, origin_y, _, pixel_height = geotransform
 raster_x_size = sentinel_dataset.RasterXSize
 raster_y_size = sentinel_dataset.RasterYSize
 print(f"Raster size: {raster_x_size} x {raster_y_size}")
-quit()
+
 # Calculate pixel coordinates for the given latitude and longitude
 pixel_x = int((target_lon - origin_x) / pixel_width)
 pixel_y = int((target_lat - origin_y) / pixel_height)
@@ -141,9 +141,12 @@ def extract_patch(file_path, index_x, index_y, patch_size=128):
         window = Window(py - half_size, px - half_size, patch_size, patch_size)
         # Read the window for all 12 bands
         patch = src.read(window=window)
+        print(patch.shape)
 
     return patch
 
+patch = extract_patch(sentinel_data, 5481, 2350)
+quit()
 for i in range(crop_x, crop_x_end):
     for j in range(crop_y, crop_y_end):
         # Extract the patch centered at the current pixel
