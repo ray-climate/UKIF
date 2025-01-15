@@ -50,8 +50,8 @@ crop_y_end = min(crop_y + crop_height, raster_y_size)
 predicted_pm25_array = np.zeros((crop_height, crop_width))
 
 for row in range(crop_y, crop_y_end):
-    # for col in range(crop_x, crop_x_end):
-    for col in range(5011, 5015):
+    for col in range(crop_x, crop_x_end):
+    # for col in range(5011, 5015):
         # read the value from the predicted_pm25_dir
         patch_file = os.path.join(predicted_pm25_dir, f'patch_{col:05d}_{row:05d}.npy')
         # Load the data
