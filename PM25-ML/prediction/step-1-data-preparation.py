@@ -153,6 +153,5 @@ for i in range(crop_x, crop_x_end):
 
         # Save the patch to a file with i and j in 3 digits
         patch_file = os.path.join(save_patch_data_dir, f'patch_{i:03d}_{j:03d}.npy')
-        print(patch.shape)
-        quit()
         np.save(patch_file, patch)
+        quit()
