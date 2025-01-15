@@ -29,7 +29,8 @@ origin_x, pixel_width, _, origin_y, _, pixel_height = geotransform
 raster_x_size = sentinel_dataset.RasterXSize
 raster_y_size = sentinel_dataset.RasterYSize
 print(f"Raster size: {raster_x_size} x {raster_y_size}")
-
+print(pixel_height)
+quit()
 # Calculate pixel coordinates for the given latitude and longitude
 pixel_x = int((target_lon - origin_x) / pixel_width)
 pixel_y = int((target_lat - origin_y) / pixel_height)
@@ -69,7 +70,7 @@ with rasterio.open(sentinel_data) as src:
     # Update the metadata for the new file
     meta.update({
         'driver': 'GTiff',
-        'height': -crop_height,
+        'height': crop_height,
         'width': crop_width,
         'count': 1,  # Single band for PM2.5
         'dtype': 'float32',
