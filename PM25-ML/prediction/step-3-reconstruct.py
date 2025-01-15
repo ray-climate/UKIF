@@ -54,6 +54,5 @@ for row in range(crop_y, crop_y_end):
         # Load the data
         data = np.load(patch_file, allow_pickle=True)
         data_dict = data.item()
-        print(data)
         predicted_pm25 = data_dict['pm25_predicted']
         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
