@@ -6,6 +6,7 @@
 # @Time:        14/01/2025 17:53
 
 from osgeo import gdal
+import subprocess
 import os
 
 sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
@@ -81,24 +82,38 @@ print(f"Cropped raster saved to: {output_cropped_sentinel_file}")
 # Define the output file for the reprojected PM2.5 data
 reprojected_pm25_file = './data/PM25_20180807_reprojected.nc'
 
-# Get the projection and extent from the cropped Sentinel file
-output_sentinel_projection = gdal.Info(output_cropped_sentinel_file, options=["-proj4"]).strip()
-output_sentinel_extent = gdal.Info(output_cropped_sentinel_file, options=["-json"])
-extent = output_sentinel_extent['cornerCoordinates']
+# Get the projection information from the cropped Sentinel file
+cropped_sentinel = gdal.Open(output_cropped_sentinel_file)
 
-xmin, ymin = extent['lowerLeft']
-xmax, ymax = extent['upperRight']
+if cropped_sentinel is None:
+    raise ValueError(f"Failed to open cropped Sentinel dataset: {output_cropped_sentinel_file}")
+
+target_srs = cropped_sentinel.GetProjection()
+cropped_sentinel = None
 
 # Use gdalwarp to reproject the PM2.5 data
 gdalwarp_command = [
     'gdalwarp',
-    '-t_srs', output_sentinel_projection,  # Match the target projection
-    '-te', str(xmin), str(ymin), str(xmax), str(ymax),  # Match the target extent
-    '-tr', str(pixel_width), str(abs(pixel_height)),  # Match the target resolution
+    '-t_srs', target_srs,  # Use the target projection string directly
+    '-te',  # Set target extent
+    str(new_geotransform[0]),  # xmin
+    str(new_geotransform[3] + (crop_y_end - crop_y) * pixel_height),  # ymin
+    str(new_geotransform[0] + (crop_x_end - crop_x) * pixel_width),  # xmax
+    str(new_geotransform[3]),  # ymax
+    '-tr', str(pixel_width), str(abs(pixel_height)),  # Target resolution
+    '-overwrite',  # Overwrite output if it exists
     pm25_data,
     reprojected_pm25_file
 ]
 
-# Execute the gdalwarp command
+# Execute the gdalwarp command using subprocess
 print("Running gdalwarp for reprojecting PM2.5 data...")
-os.system(' '.join(gdalwarp_command))
+print("Command:", ' '.join(gdalwarp_command))
+try:
+    result = subprocess.run(gdalwarp_command, check=True, capture_output=True, text=True)
+    print("Reprojection completed successfully")
+except subprocess.CalledProcessError as e:
+    print("Error during reprojection:")
+    print("stdout:", e.stdout)
+    print("stderr:", e.stderr)
+    raise
