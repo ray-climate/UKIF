@@ -109,9 +109,6 @@ gdalwarp_command = [
     reprojected_pm25_file
 ]
 
-# Execute the gdalwarp command using subprocess
-print("Running gdalwarp for reprojecting PM2.5 data...")
-print("Command:", ' '.join(gdalwarp_command))
 try:
     result = subprocess.run(gdalwarp_command, check=True, capture_output=True, text=True)
     print("Reprojection completed successfully")
@@ -154,4 +151,5 @@ for i in range(crop_x, crop_x_end):
         # Save the patch to a file with i and j in 3 digits
         patch_file = os.path.join(save_patch_data_dir, f'patch_{i:05d}_{j:05d}.npy')
         np.save(patch_file, patch)
+        print(f"Saved patch to: {patch_file}")
 
