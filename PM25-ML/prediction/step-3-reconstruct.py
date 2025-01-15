@@ -52,6 +52,6 @@ for row in range(crop_y, crop_y_end):
         # read the value from the predicted_pm25_dir
         patch_file = os.path.join(predicted_pm25_dir, f'patch_{col:05d}_{row:05d}.npy')
         # Load the data
-        data = np.load(patch_file)
+        data = np.load(patch_file, allow_pickle=True)
         predicted_pm25 = data['pm25_predicted']
         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
