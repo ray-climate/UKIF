@@ -3,7 +3,7 @@
 #SBATCH --output=logs/job_%A_%a.out
 #SBATCH --error=logs/job_%A_%a.err
 #SBATCH --array=0-99
-#SBATCH --time=04:00:00
+#SBATCH --time=03:00:00
 #SBATCH --mem=16000
 
 # Create logs directory if it doesn't exist
