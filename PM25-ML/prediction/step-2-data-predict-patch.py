@@ -10,11 +10,11 @@ import numpy as np
 import os
 
 # Load the trained model
-model = tf.keras.models.load_model('..//pm25_model_pre_v0.h5')
+model = tf.keras.models.load_model('../pm25_model_pre_v0.h5')
 
 # Define the data folder for testing data
 test_data_folder = './data_patch'
 
 # Get list of .npz files
-npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npz')]
+npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npy')]
 print(f'Found {len(npz_files)} .npz files in the folder')
