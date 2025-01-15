@@ -139,7 +139,6 @@ def extract_patch(file_path, col, row, patch_size=128):
         half_size = patch_size // 2
         window = Window(col - half_size, row - half_size, patch_size, patch_size)
         patch = src.read(window=window)
-        print(patch.shape)
         return patch
 
 for row in range(crop_y, crop_y_end):
@@ -147,3 +146,4 @@ for row in range(crop_y, crop_y_end):
         patch = extract_patch(sentinel_data, col, row)
         patch_file = os.path.join(save_patch_data_dir, f'patch_{col:05d}_{row:05d}.npy')
         np.save(patch_file, patch)
+        print(f"Saved patch to {patch_file}")
