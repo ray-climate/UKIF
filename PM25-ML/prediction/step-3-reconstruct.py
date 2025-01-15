@@ -47,6 +47,9 @@ crop_y = pixel_y
 crop_x_end = min(crop_x + crop_width, raster_x_size)
 crop_y_end = min(crop_y + crop_height, raster_y_size)
 
+predicted_pm25_array = np.zeros((crop_height, crop_width))
+print(crop_x, crop_y_end)
+quit()
 for row in range(crop_y, crop_y_end):
     for col in range(crop_x, crop_x_end):
         # read the value from the predicted_pm25_dir
@@ -56,3 +59,31 @@ for row in range(crop_y, crop_y_end):
         data_dict = data.item()
         predicted_pm25 = data_dict['pm25_predicted']
         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
+        predicted_pm25_array[row - crop_y, col - crop_x] = predicted_pm25
+
+# Create the output GeoTIFF file
+with rasterio.open(sentinel_data) as src:
+    # Get the metadata from the source file
+    meta = src.meta.copy()
+
+    # Update the metadata for the new file
+    meta.update({
+        'driver': 'GTiff',
+        'height': crop_height,
+        'width': crop_width,
+        'count': 1,  # Single band for PM2.5
+        'dtype': 'float32',
+        'transform': rasterio.transform.from_origin(
+            origin_x + (crop_x * pixel_width),
+            origin_y + (crop_y * pixel_height),
+            pixel_width,
+            pixel_height
+        )
+    })
+
+    # Create the new file with updated metadata
+    output_pm25_file = output_cropped_sentinel_file.replace('.tif', '_pm25.tif')
+    with rasterio.open(output_pm25_file, 'w', **meta) as dst:
+        dst.write(predicted_pm25_array.astype('float32'), 1)
+
+print(f"Saved predicted PM2.5 values to: {output_pm25_file}")
