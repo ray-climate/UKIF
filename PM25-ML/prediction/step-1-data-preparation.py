@@ -142,16 +142,8 @@ def extract_patch(file_path, col, row, patch_size=128):
         print(patch.shape)
         return patch
 
-
-patch = extract_patch(sentinel_data, 5481, 2350)
-quit()
-for i in range(crop_x, crop_x_end):
-    for j in range(crop_y, crop_y_end):
-        # Extract the patch centered at the current pixel
-        patch = extract_patch(sentinel_data, i, j)
-
-        # Save the patch to a file with i and j in 3 digits
-        patch_file = os.path.join(save_patch_data_dir, f'patch_{i:05d}_{j:05d}.npy')
+for row in range(crop_y, crop_y_end):
+    for col in range(crop_x, crop_x_end):
+        patch = extract_patch(sentinel_data, col, row)
+        patch_file = os.path.join(save_patch_data_dir, f'patch_{col:05d}_{row:05d}.npy')
         np.save(patch_file, patch)
-        print(f"Saved patch to: {patch_file}")
-
