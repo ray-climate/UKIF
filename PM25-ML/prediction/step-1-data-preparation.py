@@ -5,8 +5,11 @@
 # @Email:       rui.song@physics.ox.ac.uk
 # @Time:        14/01/2025 17:53
 
+from rasterio.windows import Window
 from osgeo import gdal
+import numpy as np
 import subprocess
+import rasterio
 import os
 
 sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
@@ -117,3 +120,38 @@ except subprocess.CalledProcessError as e:
     print("stdout:", e.stdout)
     print("stderr:", e.stderr)
     raise
+
+#-----------------------------------------------------------------
+# prepare patch for each pixel within the cropped region
+save_patch_data_dir = './data_patch/'
+os.makedirs(save_patch_data_dir, exist_ok=True)
+
+def extract_patch(file_path, index_x, index_y, patch_size=128):
+    """
+    Extract a patch of size patch_size x patch_size x 12 bands centered at the pixel location corresponding
+    to the given latitude and longitude.
+    """
+    # Open the raster file
+    with rasterio.open(file_path) as src:
+        # Transform for converting lat/lon to pixel coordinates
+        transform = src.transform
+        # Get pixel coordinates
+        px, py = index_x, index_y
+
+        # Calculate window boundaries
+        half_size = patch_size // 2
+        window = Window(py - half_size, px - half_size, patch_size, patch_size)
+        # Read the window for all 12 bands
+        patch = src.read(window=window)
+
+    return patch
+
+for i in range(crop_x, crop_x_end):
+    for j in range(crop_y, crop_y_end):
+        # Extract the patch centered at the current pixel
+        patch = extract_patch(output_cropped_sentinel_file, i, j)
+        print(patch)
+        quit()
+        # Save the patch to a file
+        patch_file = os.path.join(save_patch_data_dir, f'patch_{i}_{j}.npy')
+        np.save(patch_file, patch)
