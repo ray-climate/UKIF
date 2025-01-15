@@ -25,6 +25,7 @@ for file in npz_files:
     # Load the data
     data = np.load(file)
     print(data)
+    print(data.shape)
     # # Get the patch
     # patch = data['patch'].astype(np.float32)  # Convert to float32
     quit()
