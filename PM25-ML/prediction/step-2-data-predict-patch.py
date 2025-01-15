@@ -24,8 +24,11 @@ i = 0
 for file in npz_files:
     # Load the data
     data = np.load(file)
-    print(data)
     print(data.shape)
     # # Get the patch
     # patch = data['patch'].astype(np.float32)  # Convert to float32
+    patch = np.transpose(data, (1, 2, 0))  # Shape becomes (128, 128, 13)
+    patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
+    print(patch.shape)
+
     quit()
