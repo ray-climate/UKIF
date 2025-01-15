@@ -48,7 +48,8 @@ crop_x_end = min(crop_x + crop_width, raster_x_size)
 crop_y_end = min(crop_y + crop_height, raster_y_size)
 
 predicted_pm25_array = np.zeros((crop_height, crop_width))
-
+print(crop_y, crop_y_end)
+quit()
 for row in range(crop_y, crop_y_end):
     # for col in range(crop_x, crop_x_end):
     for col in range(5011, 5015):
