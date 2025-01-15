@@ -33,6 +33,7 @@ print(f"Raster size: {raster_x_size} x {raster_y_size}")
 # Calculate pixel coordinates for the given latitude and longitude
 pixel_x = int((target_lon - origin_x) / pixel_width)
 pixel_y = int((target_lat - origin_y) / pixel_height)
+pixel_y = int((origin_y - target_lat) / abs(pixel_height))
 print(pixel_y)
 quit()
 # Ensure the coordinates are within the raster bounds
