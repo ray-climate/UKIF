@@ -45,5 +45,5 @@ for i, file in enumerate(npz_files[start_idx:end_idx]):
 
     # Save the data to the new directory
     save_file = os.path.join(save_dir, os.path.basename(file))
-    np.save(save_file, **data_dict)
+    np.save(save_file, data_dict)
     print(f'Processed file {start_idx + i} with PM2.5 value {predicted_pm25}')
