@@ -149,7 +149,7 @@ def extract_patch(file_path, index_x, index_y, patch_size=128):
 for i in range(crop_x, crop_x_end):
     for j in range(crop_y, crop_y_end):
         # Extract the patch centered at the current pixel
-        patch = extract_patch(output_cropped_sentinel_file, i, j)
+        patch = extract_patch(sentinel_data, i, j)
         print(patch)
         quit()
         # Save the patch to a file
