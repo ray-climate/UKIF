@@ -30,5 +30,8 @@ for file in npz_files:
     patch = np.transpose(data, (1, 2, 0))  # Shape becomes (128, 128, 13)
     patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
     print(patch.shape)
+    # Make prediction
+    predicted_pm25 = model.predict(patch)
+    print(predicted_pm25)
 
     quit()
