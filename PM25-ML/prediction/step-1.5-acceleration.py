@@ -46,6 +46,7 @@ def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_en
         col, row = pixels[idx]
         patch = extract_patch(sentinel_data, col, row)
         patch_file = os.path.join(save_patch_data_dir, f'patch_{col:05d}_{row:05d}.npy')
+        print(patch.shape)
         np.save(patch_file, patch)
         print(f"Saved patch to {patch_file}")
 
