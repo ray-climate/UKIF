@@ -124,7 +124,6 @@ except subprocess.CalledProcessError as e:
 save_patch_data_dir = './data_patch/'
 os.makedirs(save_patch_data_dir, exist_ok=True)
 
-
 def extract_patch(file_path, col, row, patch_size=128):
     """
     Extract a patch of size patch_size x patch_size x 12 bands centered at the given pixel coordinates.
