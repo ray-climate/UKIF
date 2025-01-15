@@ -32,6 +32,7 @@ for file in npz_files:
     print(patch.shape)
     # Make prediction
     predicted_pm25 = model.predict(patch)
+    predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
     print(predicted_pm25)
 
     quit()
