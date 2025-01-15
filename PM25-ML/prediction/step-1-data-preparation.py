@@ -124,27 +124,24 @@ except subprocess.CalledProcessError as e:
 save_patch_data_dir = './data_patch/'
 os.makedirs(save_patch_data_dir, exist_ok=True)
 
-def extract_patch(file_path, index_x, index_y, patch_size=128):
-    """
-    Extract a patch of size patch_size x patch_size x 12 bands centered at the pixel location corresponding
-    to the given latitude and longitude.
-    """
-    # Open the raster file
-    with rasterio.open(file_path) as src:
-        # Transform for converting lat/lon to pixel coordinates
-        transform = src.transform
-        # Get pixel coordinates
-        px, py = index_x, index_y
 
-        # Calculate window boundaries
+def extract_patch(file_path, col, row, patch_size=128):
+    """
+    Extract a patch of size patch_size x patch_size x 12 bands centered at the given pixel coordinates.
+
+    Args:
+        file_path: Path to the raster file
+        col: Column index (X coordinate in pixel space)
+        row: Row index (Y coordinate in pixel space)
+        patch_size: Size of the patch to extract
+    """
+    with rasterio.open(file_path) as src:
         half_size = patch_size // 2
-        window = Window(py - half_size, px - half_size, patch_size, patch_size)
-        print(window)
-        # Read the window for all 12 bands
+        window = Window(col - half_size, row - half_size, patch_size, patch_size)
         patch = src.read(window=window)
         print(patch.shape)
+        return patch
 
-    return patch
 
 patch = extract_patch(sentinel_data, 5481, 2350)
 quit()
