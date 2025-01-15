@@ -1,5 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=pm25_predict
+#SBATCH --partition=short-serial
 #SBATCH --output=logs/job_%A_%a.out
 #SBATCH --error=logs/job_%A_%a.err
 #SBATCH --array=0-99
