@@ -94,7 +94,7 @@ gdalwarp_command = [
     pm25_data,
     reprojected_pm25_file
 ]
-
+print(gdalwarp_command)
 # Execute the gdalwarp command
 print("Running gdalwarp for reprojecting PM2.5 data...")
 os.system(' '.join(gdalwarp_command))
