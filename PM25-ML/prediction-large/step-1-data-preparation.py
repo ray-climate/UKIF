@@ -12,16 +12,17 @@ import subprocess
 import rasterio
 import os
 
-sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180507_CloudMasked.tif'
-pm25_data =     '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/modis_pm25_data_reproject_crop/GHAP_PM2.5_D1K_20180507_V1_cropped_projected.nc'
-output_cropped_sentinel_file = './data/Sentinel2_L1C_20180807_CloudMasked_cropped.tif'
+date_input = '20180507'
+sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_%s_CloudMasked.tif' % date_input
+pm25_data =     '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/modis_pm25_data_reproject_crop/GHAP_PM2.5_D1K_%s_V1_cropped_projected.nc'% date_input
+output_cropped_sentinel_file = './data/Sentinel2_L1C_%s_CloudMasked_cropped.tif'% date_input
 
-crop_width = 500 # pixels
-crop_height = 500 # pixels
+crop_width = 2000 # pixels
+crop_height = 2000 # pixels
 
 sentinel_dataset = gdal.Open(sentinel_data)
-target_lat = 51.518 # top left corner of the selected box
-target_lon = -0.136 # top left corner of the selected box
+target_lat = 51.612559  # top left corner of the selected box
+target_lon = -0.264561 # top left corner of the selected box
 
 # Get the geotransform and raster size
 geotransform = sentinel_dataset.GetGeoTransform()
@@ -84,7 +85,7 @@ print(f"Cropped raster saved to: {output_cropped_sentinel_file}")
 #-----------------------------------------------------------------
 # reproject MODIS PM2.5
 # Define the output file for the reprojected PM2.5 data
-reprojected_pm25_file = './data/PM25_20180807_reprojected.nc'
+reprojected_pm25_file = './data/PM25_%s_reprojected.nc'% date_input
 
 # Get the projection information from the cropped Sentinel file
 cropped_sentinel = gdal.Open(output_cropped_sentinel_file)
