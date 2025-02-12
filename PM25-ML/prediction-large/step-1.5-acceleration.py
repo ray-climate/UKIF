@@ -25,8 +25,9 @@ def extract_patch(file_path, col, row, patch_size=128):
         return patch
 
 
-def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end):
-    sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
+def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i):
+
+    sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_%s_CloudMasked.tif' %date_i
     save_patch_data_dir = './data_patch/'
     os.makedirs(save_patch_data_dir, exist_ok=True)
 
@@ -52,6 +53,8 @@ def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_en
 
 if __name__ == "__main__":
 
+    date_i = '20180507'
+
     if len(sys.argv) != 3:
         print("Usage: python process_chunk.py <job_id> <total_jobs>")
         sys.exit(1)
@@ -61,12 +64,12 @@ if __name__ == "__main__":
     total_jobs = int(sys.argv[2])
 
     # These values should match your original script
-    target_lat = 51.518
-    target_lon = -0.136
-    crop_width = 500
-    crop_height = 500
+    target_lat = 51.612559  # top left corner of the selected box
+    target_lon = -0.264561  # top left corner of the selected box
+    crop_width = 2000  # pixels
+    crop_height = 2000  # pixels
 
-    sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_20180807_CloudMasked.tif'
+    sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_%s_CloudMasked.tif'%date_i
 
     # Calculate initial coordinates
     sentinel_dataset = gdal.Open(sentinel_data)
@@ -93,4 +96,4 @@ if __name__ == "__main__":
     chunk_size = -(-total_pixels // total_jobs)  # Ceiling division
     start_idx = job_id * chunk_size
 
-    process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end)
+    process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i)
