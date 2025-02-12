@@ -95,5 +95,5 @@ if __name__ == "__main__":
     # Calculate chunk size for each job
     chunk_size = -(-total_pixels // total_jobs)  # Ceiling division
     start_idx = job_id * chunk_size
-
-    process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i)
+    print(f"Job {job_id}: Processing pixels {start_idx} to {start_idx + chunk_size}")
+    # process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i)
