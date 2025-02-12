@@ -5,14 +5,13 @@
 # @Email:       rui.song@physics.ox.ac.uk
 # @Time:        15/01/2025 21:27
 
-# process_chunk.py
 from rasterio.windows import Window
 from osgeo import gdal
 import numpy as np
 import rasterio
-import os
+import h5py
 import sys
-
+import os
 
 def extract_patch(file_path, col, row, patch_size=128):
     """
@@ -28,7 +27,7 @@ def extract_patch(file_path, col, row, patch_size=128):
 def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i):
 
     sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_%s_CloudMasked.tif' %date_i
-    save_patch_data_dir = './data_patch/'
+    save_patch_data_dir = './data_chunk/'
     os.makedirs(save_patch_data_dir, exist_ok=True)
 
     # Calculate the actual pixels this process should handle
@@ -40,6 +39,17 @@ def process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_en
     # Process only this chunk's portion
     chunk_start = start_idx
     chunk_end = min(start_idx + chunk_size, len(pixels))
+
+    # Create an HDF5 file to store all patches
+    hdf5_file = os.path.join(save_patch_data_dir, f'chunk_{job_id}.h5')
+    with h5py.File(hdf5_file, 'w') as f:
+        for idx in range(chunk_start, chunk_end):
+            if idx >= len(pixels):
+                break
+            col, row = pixels[idx]
+            patch = extract_patch(sentinel_data, col, row)
+            f.create_dataset(f'patch_{col:05d}_{row:05d}', data=patch)
+            print(f"Saved patch {col:05d}_{row:05d} to {hdf5_file}")
 
     for idx in range(chunk_start, chunk_end):
         if idx >= len(pixels):
@@ -96,4 +106,4 @@ if __name__ == "__main__":
     chunk_size = -(-total_pixels // total_jobs)  # Ceiling division
     start_idx = job_id * chunk_size
     print(f"Job {job_id}: Processing pixels {start_idx} to {start_idx + chunk_size}")
-    # process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i)
+    process_chunk(start_idx, chunk_size, total_pixels, crop_x, crop_y, crop_x_end, crop_y_end, date_i)
