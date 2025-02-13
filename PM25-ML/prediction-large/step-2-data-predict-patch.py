@@ -22,6 +22,16 @@ os.makedirs(save_dir, exist_ok=True)
 
 # read hdf5 file
 input_data = h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r')
+# read each dataset in the hdf5 file
+# Open the HDF5 file for reading
+with h5py.File(input_data, 'r') as f:
+    # Loop through all the datasets (patches) in the file
+    for patch_name in f.keys():
+        # Read the patch data
+        patch = f[patch_name][()]
+        print('read patch:', patch_name, patch.shape)
+
+
 print(input_data.keys())
 quit()
 # Get list of .npz files
