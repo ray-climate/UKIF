@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# SLURM directives
 #SBATCH --partition=short-serial
 #SBATCH --job-name=process_patches
 #SBATCH --output=logs/process_patches_%A_%a.out

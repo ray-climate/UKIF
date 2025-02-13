@@ -42,34 +42,3 @@ with h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r') as f:
             # Save the patch and predicted PM2.5 to the new HDF5 file
             f_out.create_dataset(f'{patch_name}/patch', data=patch[0])  # Save the original patch
             f_out.create_dataset(f'{patch_name}/predicted_pm25', data=predicted_pm25)  # Save the predicted PM2.5
-
-print(f"Predictions saved to {save_dir}/chunk_{job_id}_predicted.h5")
-
-quit()
-# Get list of .npz files
-npz_files = [os.path.join(test_data_folder, f) for f in os.listdir(test_data_folder) if f.endswith('.npy')]
-print(f'Found {len(npz_files)} .npz files in the folder')
-
-# Iterate over each file and make predictions
-i = 0
-for file in npz_files:
-    # Load the data
-    data = np.load(file)
-
-    patch = np.transpose(data, (1, 2, 0))  # Shape becomes (128, 128, 13)
-    patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
-
-    # Make prediction
-    predicted_pm25 = model.predict(patch)
-    predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
-    print(predicted_pm25)
-
-    data_dict = dict(data)
-    data_dict['pm25_predicted'] = predicted_pm25
-    data_dict['patch'] = patch
-
-    # Save the data to the new directory
-    save_file = os.path.join(save_dir, os.path.basename(file))
-    np.save(save_file, **data_dict)
-    print(f'Predicted the {i}th patch with PM2.5 value of {predicted_pm25}')
-    i += 1
