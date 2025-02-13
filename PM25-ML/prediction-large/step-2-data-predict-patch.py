@@ -22,21 +22,28 @@ os.makedirs(save_dir, exist_ok=True)
 
 # Open the HDF5 file for reading
 with h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r') as f:
-    # Loop through all the datasets (patches) in the file
-    for patch_name in f.keys():
-        # Read the patch data
-        patch = f[patch_name][()]
-        print('read patch:', patch_name, patch.shape)
+    # Create a new HDF5 file for saving predicted data
+    with h5py.File(f'{save_dir}/chunk_{job_id}_predicted.h5', 'w') as f_out:
+        # Loop through all the datasets (patches) in the file
+        for patch_name in f.keys():
+            # Read the patch data
+            patch = f[patch_name][()]
+            print('read patch:', patch_name, patch.shape)
 
-        # patch = data['patch'].astype(np.float32)  # Convert to float32
-        patch = np.transpose(patch, (1, 2, 0))  # Shape becomes (128, 128, 13)
-        patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
+            # patch = data['patch'].astype(np.float32)  # Convert to float32
+            patch = np.transpose(patch, (1, 2, 0))  # Shape becomes (128, 128, 13)
+            patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
 
-        # Make prediction
-        predicted_pm25 = model.predict(patch)
-        predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
-        print(predicted_pm25)
+            # Make prediction
+            predicted_pm25 = model.predict(patch)
+            predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
+            print(predicted_pm25)
 
+            # Save the patch and predicted PM2.5 to the new HDF5 file
+            f_out.create_dataset(f'{patch_name}/patch', data=patch[0])  # Save the original patch
+            f_out.create_dataset(f'{patch_name}/predicted_pm25', data=predicted_pm25)  # Save the predicted PM2.5
+
+print(f"Predictions saved to {save_dir}/chunk_{job_id}_predicted.h5")
 
 quit()
 # Get list of .npz files
@@ -49,8 +56,6 @@ for file in npz_files:
     # Load the data
     data = np.load(file)
 
-    # # Get the patch
-    # patch = data['patch'].astype(np.float32)  # Convert to float32
     patch = np.transpose(data, (1, 2, 0))  # Shape becomes (128, 128, 13)
     patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
 
