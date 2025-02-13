@@ -28,6 +28,15 @@ with h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r') as f:
         patch = f[patch_name][()]
         print('read patch:', patch_name, patch.shape)
 
+        # patch = data['patch'].astype(np.float32)  # Convert to float32
+        patch = np.transpose(patch, (1, 2, 0))  # Shape becomes (128, 128, 13)
+        patch = np.expand_dims(patch, axis=0)  # Shape becomes (1, 128, 128, 13)
+
+        # Make prediction
+        predicted_pm25 = model.predict(patch)
+        predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
+        print(predicted_pm25)
+
 
 quit()
 # Get list of .npz files
