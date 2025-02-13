@@ -21,7 +21,7 @@ save_dir = './data_chunk_new_predicted'
 os.makedirs(save_dir, exist_ok=True)
 
 # read hdf5 file
-input_data = h5py.File(f'{test_data_folder}/data_chunk_{job_id}.h5', 'r')
+input_data = h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r')
 print(input_data.keys())
 quit()
 # Get list of .npz files
