@@ -13,4 +13,4 @@ mkdir -p logs-predict
 
 # Your script execution
 conda activate tf-gpu
-python step-2-data-predict-patch.py ${SLURM_ARRAY_TASK_ID} 100
+python step-2-data-predict-patch.py ${SLURM_ARRAY_TASK_ID}

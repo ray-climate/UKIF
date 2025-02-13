@@ -8,9 +8,10 @@
 import tensorflow as tf
 import numpy as np
 import h5py
+import sys
 import os
 
-job_id = 0
+job_id = sys.argv[1]
 
 # Load the trained model
 model = tf.keras.models.load_model('../pm25_model_pre_v0.h5')
