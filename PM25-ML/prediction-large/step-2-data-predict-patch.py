@@ -9,6 +9,7 @@ import tensorflow as tf
 import numpy as np
 import h5py
 import sys
+import csv
 import os
 
 job_id = sys.argv[1]
@@ -18,13 +19,17 @@ model = tf.keras.models.load_model('../pm25_model_pre_v0.h5')
 
 # Define the data folder for testing data
 test_data_folder = './data_chunk_new'
-save_dir = './data_chunk_new_predicted'
+save_dir = './data_chunk_new_predicted_csv'
 os.makedirs(save_dir, exist_ok=True)
 
 # Open the HDF5 file for reading
 with h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r') as f:
-    # Create a new HDF5 file for saving predicted data
-    with h5py.File(f'{save_dir}/chunk_{job_id}_predicted.h5', 'w') as f_out:
+
+    with open(f'{save_dir}/chunk_{job_id}_predictions.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        # Write the header
+        csvwriter.writerow(['patch_name', 'predicted_pm25'])
+
         # Loop through all the datasets (patches) in the file
         for patch_name in f.keys():
             # Read the patch data
@@ -40,6 +45,5 @@ with h5py.File(f'{test_data_folder}/chunk_{job_id}.h5', 'r') as f:
             predicted_pm25 = predicted_pm25[0][0]  # Extract scalar value
             print(predicted_pm25)
 
-            # Save the patch and predicted PM2.5 to the new HDF5 file
-            f_out.create_dataset(f'{patch_name}/patch', data=patch[0])  # Save the original patch
-            f_out.create_dataset(f'{patch_name}/predicted_pm25', data=predicted_pm25)  # Save the predicted PM2.5
+            # Save the patch_name and predicted_pm25 to the CSV file
+            csvwriter.writerow([patch_name, predicted_pm25])
