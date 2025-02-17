@@ -79,7 +79,7 @@ for row in range(crop_y, crop_y_end):
     for col in range(crop_x, crop_x_end):
         patch_name = f'patch_{col:05d}_{row:05d}'
         predicted_pm25_array[row - crop_y, col - crop_x] = pm25_dict.get(patch_name, 0)
-        print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
+        print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25_array[row - crop_y, col - crop_x]}")
 
 # Create the output GeoTIFF file
 with rasterio.open(sentinel_data) as src:
