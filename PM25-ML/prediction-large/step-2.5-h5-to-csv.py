@@ -35,6 +35,7 @@ with h5py.File(f'{save_dir}/chunk_{job_id}_predicted.h5', 'r') as f:
 
         # Loop through all the datasets (patches) in the file
         for patch_name in f.keys():
+            print(f"Processing {patch_name}")
             # Read the predicted PM2.5 value
             predicted_pm25 = f[patch_name]['predicted_pm25'][()]
 
