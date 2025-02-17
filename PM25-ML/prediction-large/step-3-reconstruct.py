@@ -29,7 +29,11 @@ for filename in os.listdir(predicted_pm25_dir):
         dataframes.append(df)  # Append the DataFrame to the list
         print(f"Loaded data from: {file_path}")
 
-print(dataframes)
+# Combine all DataFrames into one
+combined_df = pd.concat(dataframes, ignore_index=True)
+# Display the combined DataFrame
+print(combined_df)
+
 quit()
 
 
