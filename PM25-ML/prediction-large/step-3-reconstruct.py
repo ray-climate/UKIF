@@ -32,6 +32,7 @@ for filename in os.listdir(predicted_pm25_dir):
 # Combine all DataFrames into one
 combined_df = pd.concat(dataframes, ignore_index=True)
 # Display the combined DataFrame
+pm25_dict = dict(zip(combined_df['patch_name'], combined_df['predicted_pm25']))
 
 crop_width = 2000 # pixels
 crop_height = 2000 # pixels
@@ -66,13 +67,19 @@ crop_y_end = min(crop_y + crop_height, raster_y_size)
 
 predicted_pm25_array = np.zeros((crop_height, crop_width))
 
+# for row in range(crop_y, crop_y_end):
+#     for col in range(crop_x, crop_x_end):
+#     # for col in range(5011, 5015):
+#         # read the value from the predicted_pm25_dir
+#         predicted_pm25 = combined_df.loc[(combined_df['patch_name'] == f'patch_{col:05d}_{row:05d}')]['predicted_pm25'].values[0]
+#         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
+#         predicted_pm25_array[row - crop_y, col - crop_x] = predicted_pm25
+
 for row in range(crop_y, crop_y_end):
     for col in range(crop_x, crop_x_end):
-    # for col in range(5011, 5015):
-        # read the value from the predicted_pm25_dir
-        predicted_pm25 = combined_df.loc[(combined_df['patch_name'] == f'patch_{col:05d}_{row:05d}')]['predicted_pm25'].values[0]
+        patch_name = f'patch_{col:05d}_{row:05d}'
+        predicted_pm25_array[row - crop_y, col - crop_x] = pm25_dict.get(patch_name, 0)
         print(f"Predicted PM2.5 value at ({col}, {row}): {predicted_pm25}")
-        predicted_pm25_array[row - crop_y, col - crop_x] = predicted_pm25
 
 # Create the output GeoTIFF file
 with rasterio.open(sentinel_data) as src:
