@@ -7,6 +7,7 @@
 
 from rasterio.windows import Window
 from osgeo import gdal
+import pandas as pd
 import numpy as np
 import subprocess
 import rasterio
@@ -16,7 +17,21 @@ date_i = '20180507'
 
 sentinel_data = '/gws/pw/j07/nceo_aerosolfire/rsong/project/UKIF/PM25-ML/data_preprocess/S2L1C_London/Sentinel2_L1C_%s_CloudMasked.tif'%date_i
 output_cropped_sentinel_file = './data/Sentinel2_L1C_%s_CloudMasked_cropped.tif'%date_i
-predicted_pm25_dir = './data_chunk_new_predicted'
+predicted_pm25_dir = './data_chunk_new_predicted_csv'
+
+dataframes = []
+
+# Loop through all files in the folder
+for filename in os.listdir(predicted_pm25_dir):
+    if filename.endswith('.csv'):  # Check if the file is a CSV
+        file_path = os.path.join(predicted_pm25_dir, filename)  # Get the full file path
+        df = pd.read_csv(file_path)  # Read the CSV file into a DataFrame
+        dataframes.append(df)  # Append the DataFrame to the list
+        print(f"Loaded data from: {file_path}")
+
+print(dataframes)
+quit()
+
 
 crop_width = 2000 # pixels
 crop_height = 2000 # pixels
