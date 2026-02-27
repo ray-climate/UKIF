@@ -1,0 +1,23 @@
+{
+  "ndvi_variable": "ndvi_anom",
+  "ndvi_metric": "mean",
+  "ndvi_months": [
+    5,
+    6,
+    7
+  ],
+  "regression_type": "linear",
+  "degree": 1,
+  "coefficients": [
+    3.1490624601610375,
+    -0.2695488120116661
+  ],
+  "R2": 0.06192508429934751,
+  "RMSE": 0.9842188546026986,
+  "n_samples": 1241691,
+  "years": [
+    2020,
+    2021,
+    2022
+  ]
+}
