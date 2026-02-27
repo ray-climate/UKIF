@@ -26,11 +26,15 @@ The regression was trained on `ndvi_anom` (NDVI anomaly relative to the multi-ye
 
 ## Pre-computed files (`precomputed/`)
 
-| File | Description |
-|---|---|
-| `tsHARP_regression_model.json` | Polynomial coefficients and metadata (trained on 2020–2022, months May–Jul) |
-| `residual_1km.tif` | 1 km SPEI residual GeoTIFF for the target year |
-| `climatology_ndvi_1km.tif` | Multi-year mean NDVI at 1 km (May–Jul average, 2020–2022), used to compute NDVI anomaly |
+| File | Year-specific? | Description |
+|---|---|---|
+| `tsHARP_regression_model.json` | No | Polynomial coefficients (trained on 2020–2022, months May–Jul) |
+| `climatology_ndvi_1km.tif` | No | Multi-year mean NDVI at 1 km (May–Jul average, 2020–2022), used to convert raw NDVI to anomaly |
+| `residual_1km_2020.tif` | **Yes** | 1 km residual = SPEI_observed − f(NDVI_1km) for 2020 |
+| `residual_1km_2021.tif` | **Yes** | 1 km residual for 2021 |
+| `residual_1km_2022.tif` | **Yes** | 1 km residual for 2022 |
+
+The script automatically selects `residual_1km_YEAR.tif` based on the `--year` argument.
 
 ## Installation
 

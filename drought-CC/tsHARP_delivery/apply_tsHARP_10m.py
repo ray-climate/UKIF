@@ -46,8 +46,12 @@ LOG = logging.getLogger(__name__)
 # Default paths (relative to this script's location)
 _HERE = Path(__file__).resolve().parent
 DEFAULT_REGRESSION_MODEL = _HERE / "precomputed" / "tsHARP_regression_model.json"
-DEFAULT_RESIDUAL_TIF     = _HERE / "precomputed" / "residual_1km.tif"
 DEFAULT_CLIMATOLOGY_TIF  = _HERE / "precomputed" / "climatology_ndvi_1km.tif"
+
+
+def default_residual_path(year: int) -> Path:
+    """Return the expected residual GeoTIFF path for a given year."""
+    return _HERE / "precomputed" / f"residual_1km_{year}.tif"
 
 
 # ── Raster helpers ────────────────────────────────────────────────────────────
@@ -314,8 +318,11 @@ def parse_args() -> argparse.Namespace:
         help=f"Path to tsHARP_regression_model.json (default: {DEFAULT_REGRESSION_MODEL}).",
     )
     parser.add_argument(
-        "--residual-tif", type=Path, default=DEFAULT_RESIDUAL_TIF,
-        help=f"Path to the 1 km residual GeoTIFF (default: {DEFAULT_RESIDUAL_TIF}).",
+        "--residual-tif", type=Path, default=None,
+        help=(
+            "Path to the 1 km residual GeoTIFF. "
+            "Defaults to precomputed/residual_1km_YEAR.tif where YEAR matches --year."
+        ),
     )
     parser.add_argument(
         "--climatology-tif", type=Path, default=DEFAULT_CLIMATOLOGY_TIF,
@@ -339,8 +346,21 @@ def main() -> int:
         format="[%(levelname)s] %(message)s",
     )
 
-    # Validate inputs
-    for p in [args.regression_model, args.residual_tif, args.climatology_tif]:
+    # Resolve residual path: explicit override or auto-select by year
+    residual_tif = args.residual_tif or default_residual_path(args.year)
+    if not residual_tif.exists():
+        LOG.error(
+            "Residual file not found for year %d: %s\n"
+            "Available residuals: %s",
+            args.year, residual_tif,
+            ", ".join(str(p.name) for p in sorted(
+                (_HERE / "precomputed").glob("residual_1km_*.tif")
+            )) or "none"
+        )
+        return 1
+
+    # Validate other inputs
+    for p in [args.regression_model, args.climatology_tif]:
         if not p.exists():
             LOG.error("File not found: %s", p)
             return 1
@@ -354,7 +374,7 @@ def main() -> int:
     apply_tsharp(
         ndvi_files=ndvi_files,
         regression_model_path=args.regression_model,
-        residual_tif_path=args.residual_tif,
+        residual_tif_path=residual_tif,
         climatology_tif_path=args.climatology_tif,
         output_dir=args.output_dir.expanduser().resolve(),
         year=args.year,
