@@ -19,8 +19,10 @@ Usage
 -----
     python apply_tsHARP_10m.py \\
         --ndvi-files NDVI_May.tif NDVI_Jun.tif NDVI_Jul.tif \\
+        --year 2022 \\
         --output-dir ./output_2022
 
+The --year argument selects the matching residual_1km_YEAR.tif from precomputed/.
 All other inputs default to the precomputed/ folder bundled with this script.
 """
 from __future__ import annotations
@@ -37,7 +39,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
-from rasterio.crs import CRS
 from rasterio.transform import Affine
 from rasterio.warp import Resampling, reproject
 
@@ -311,7 +312,10 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--year", type=int, required=True,
-        help="Target year (used for output file names, e.g. 2022).",
+        help=(
+            "Target year (e.g. 2022). Used to auto-select precomputed/residual_1km_YEAR.tif "
+            "and to name output files. Must match the year of your NDVI input files."
+        ),
     )
     parser.add_argument(
         "--regression-model", type=Path, default=DEFAULT_REGRESSION_MODEL,

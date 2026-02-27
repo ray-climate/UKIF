@@ -36,6 +36,8 @@ The regression was trained on `ndvi_anom` (NDVI anomaly relative to the multi-ye
 
 The script automatically selects `residual_1km_YEAR.tif` based on the `--year` argument.
 
+> **What is the residual?** It encodes the 1 km SPEI drought conditions for that year. Specifically: `R = SPEI_1km − f(NDVI_1km)`. Using the wrong year's residual will produce spatially incorrect drought patterns even if the NDVI input is correct.
+
 ## Installation
 
 ```bash
@@ -51,10 +53,17 @@ conda install -c conda-forge numpy rasterio matplotlib
 ## Usage
 
 ```bash
+# Downscale for 2022 (uses precomputed/residual_1km_2022.tif automatically)
 python apply_tsHARP_10m.py \
-    --ndvi-files NDVI_May.tif NDVI_Jun.tif NDVI_Jul.tif \
+    --ndvi-files NDVI_May_2022.tif NDVI_Jun_2022.tif NDVI_Jul_2022.tif \
     --year 2022 \
     --output-dir ./output_2022
+
+# Downscale for 2020 (uses precomputed/residual_1km_2020.tif automatically)
+python apply_tsHARP_10m.py \
+    --ndvi-files NDVI_May_2020.tif NDVI_Jun_2020.tif NDVI_Jul_2020.tif \
+    --year 2020 \
+    --output-dir ./output_2020
 ```
 
 ### Arguments
