@@ -659,8 +659,8 @@ def parse_args() -> argparse.Namespace:
         help="Regression degree: linear (degree 1) or quadratic (degree 2).",
     )
     parser.add_argument(
-        "--ndvi-files", nargs="+", type=Path, required=True,
-        help="Sentinel-2 10 m NDVI GeoTIFFs (one per month, e.g. May Jun Jul).",
+        "--ndvi-files", nargs="+", type=Path,
+        help="Sentinel-2 10 m NDVI GeoTIFFs (one per month, e.g. May Jun Jul). Required unless --residual-only.",
     )
     parser.add_argument(
         "--feature-dir", type=Path, default=Path("prepared_inputs_uk"),
@@ -686,6 +686,10 @@ def parse_args() -> argparse.Namespace:
         "--diagnostic-only", action="store_true",
         help="Run Phase 1 only (correlation diagnostics) and exit.",
     )
+    parser.add_argument(
+        "--residual-only", action="store_true",
+        help="Run Phases 1-3 only (stop after computing 1 km residual).",
+    )
     parser.add_argument("--seed", type=int, default=42, help="Random seed for zoom panels.")
     parser.add_argument(
         "--log-level", default="INFO",
@@ -700,6 +704,10 @@ def main() -> int:
         level=getattr(logging, args.log_level.upper()),
         format="[%(levelname)s] %(message)s",
     )
+
+    if not args.ndvi_files and not args.diagnostic_only and not args.residual_only:
+        LOG.error("--ndvi-files is required unless --diagnostic-only or --residual-only is set.")
+        return 1
 
     feature_dir = args.feature_dir.expanduser().resolve()
     target_dir = args.target_dir.expanduser().resolve()
@@ -750,6 +758,10 @@ def main() -> int:
         ndvi_variable, coeffs,
         output_dir,
     )
+
+    if args.residual_only:
+        LOG.info("--residual-only: stopping after Phase 3.")
+        return 0
 
     # ── Resolve climatology path ─────────────────────────────────────
     climatology_path = None

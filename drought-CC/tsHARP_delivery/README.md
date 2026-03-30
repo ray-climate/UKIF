@@ -28,15 +28,19 @@ The regression was trained on `ndvi_anom` (NDVI anomaly relative to the multi-ye
 
 | File | Year-specific? | Description |
 |---|---|---|
-| `tsHARP_regression_model.json` | No | Polynomial coefficients (trained on 2020–2022, months May–Jul) |
-| `climatology_ndvi_1km.tif` | No | Multi-year mean NDVI at 1 km (May–Jul average, 2020–2022), used to convert raw NDVI to anomaly |
-| `residual_1km_2020.tif` | **Yes** | 1 km residual = SPEI_observed − f(NDVI_1km) for 2020 |
-| `residual_1km_2021.tif` | **Yes** | 1 km residual for 2021 |
+| `tsHARP_regression_model.json` | No | Polynomial coefficients (trained on 2020–2025, months May–Jul) |
+| `climatology_ndvi_1km.tif` | No | Multi-year mean NDVI at 1 km (May–Jul average, 2020–2025), used to convert raw NDVI to anomaly |
+| `trained_xgb_model.json` | No | XGBoost regression model (SPEI prediction from LST/precip/evap features, trained 2020–2025) |
+| `trained_xgb_metrics.json` | No | Model evaluation metrics (R², RMSE, per-year breakdown) |
+| `residual_1km_2020.tif` | **Yes** | 1 km residual = SPEI_predicted − f(NDVI_1km) for 2020 |
 | `residual_1km_2022.tif` | **Yes** | 1 km residual for 2022 |
+| `residual_1km_2025.tif` | **Yes** | 1 km residual for 2025 |
 
 The script automatically selects `residual_1km_YEAR.tif` based on the `--year` argument.
 
-> **What is the residual?** It encodes the 1 km SPEI drought conditions for that year. Specifically: `R = SPEI_1km − f(NDVI_1km)`. Using the wrong year's residual will produce spatially incorrect drought patterns even if the NDVI input is correct.
+> **What is the residual?** It encodes the 1 km SPEI drought conditions for that year. Specifically: `R = SPEI_predicted − f(NDVI_1km)`, where `SPEI_predicted` is the XGBoost model output. Using the wrong year's residual will produce spatially incorrect drought patterns even if the NDVI input is correct.
+
+> **Model performance:** The XGBoost model was retrained on 2020–2025 (6 years). Test R² = 0.83, RMSE = 0.40. Per-year holdout: 2020 R²=0.80, 2021 R²=0.55, 2022 R²=0.54, 2023 R²=0.45, 2024 R²=0.85, 2025 R²=0.72. 3-fold CV: R²=0.83.
 
 ## Installation
 
@@ -53,13 +57,19 @@ conda install -c conda-forge numpy rasterio matplotlib
 ## Usage
 
 ```bash
-# Downscale for 2022 (uses precomputed/residual_1km_2022.tif automatically)
+# Downscale for 2025 (uses precomputed/residual_1km_2025.tif automatically)
+python apply_tsHARP_10m.py \
+    --ndvi-files NDVI_May_2025.tif NDVI_Jun_2025.tif NDVI_Jul_2025.tif \
+    --year 2025 \
+    --output-dir ./output_2025
+
+# Downscale for 2022
 python apply_tsHARP_10m.py \
     --ndvi-files NDVI_May_2022.tif NDVI_Jun_2022.tif NDVI_Jul_2022.tif \
     --year 2022 \
     --output-dir ./output_2022
 
-# Downscale for 2020 (uses precomputed/residual_1km_2020.tif automatically)
+# Downscale for 2020
 python apply_tsHARP_10m.py \
     --ndvi-files NDVI_May_2020.tif NDVI_Jun_2020.tif NDVI_Jul_2020.tif \
     --year 2020 \
