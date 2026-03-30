@@ -1,0 +1,40 @@
+# Raw satellite data (too large for git)
+data_s2_ndvi_uk/
+data_viirs_lst_uk/
+data_era5_total_precip_uk/
+data_era5_bare_soil_evap_uk/
+france/data_*/
+ireland/data_*/
+S2_NDVI_10m/
+albedo_NDVI/
+
+# Feature cubes and targets (large numpy arrays)
+prepared_inputs_uk/
+prepared_targets_uk/
+france/prepared_inputs_france/
+france/prepared_targets_france/
+ireland/prepared_inputs_ireland/
+ireland/prepared_targets_ireland/
+
+# Reference data
+UKCEH/
+GMID/
+
+# Intermediate outputs
+tsHARP_output_2020/
+tsHARP_output_2022/
+tsHARP_output_2025/
+tsHARP_output_albedo/
+beta_correction_output_*/
+beta_downscale_*/
+
+# Python / OS
+__pycache__/
+*.pyc
+.DS_Store
+
+# Old review files
+CODE_REVIEW.md
+STEP2_REVIEW.md
+STEP2_SUMMARY.md
+TEST_RESULTS.md

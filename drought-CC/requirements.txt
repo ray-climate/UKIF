@@ -1,0 +1,12 @@
+# Core dependencies for drought-CC project
+numpy>=1.20.0
+rasterio>=1.2.0
+
+# Optional but recommended
+matplotlib>=3.3.0
+xgboost>=1.5.0
+scikit-learn>=0.24.0
+
+# For Earth Engine data download (helper scripts)
+earthengine-api>=0.1.300
+requests>=2.25.0
