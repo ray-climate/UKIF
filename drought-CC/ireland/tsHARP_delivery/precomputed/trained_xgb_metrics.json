@@ -1,0 +1,186 @@
+{
+  "label": "may_jun_jul",
+  "months": [
+    5,
+    6,
+    7
+  ],
+  "variables": [
+    "lst",
+    "soil_evap",
+    "precip",
+    "lst_anom",
+    "soil_evap_anom",
+    "precip_anom"
+  ],
+  "feature_labels": [
+    "May_LST",
+    "May_SOIL_EVAP",
+    "May_PRECIP",
+    "May_LST_ANOM",
+    "May_SOIL_EVAP_ANOM",
+    "May_PRECIP_ANOM",
+    "Jun_LST",
+    "Jun_SOIL_EVAP",
+    "Jun_PRECIP",
+    "Jun_LST_ANOM",
+    "Jun_SOIL_EVAP_ANOM",
+    "Jun_PRECIP_ANOM",
+    "Jul_LST",
+    "Jul_SOIL_EVAP",
+    "Jul_PRECIP",
+    "Jul_LST_ANOM",
+    "Jul_SOIL_EVAP_ANOM",
+    "Jul_PRECIP_ANOM"
+  ],
+  "sample_counts": {
+    "total": 743367,
+    "train": 594693,
+    "test": 148674,
+    "per_year": {
+      "2020": 148710,
+      "2021": 148752,
+      "2022": 148582,
+      "2023": 148820,
+      "2024": 148503
+    }
+  },
+  "train_metrics": {
+    "r2": 0.9236242771148682,
+    "rmse": 0.25693141772495254,
+    "mae": 0.13398537039756775,
+    "mape_percent": 114.52034759521484,
+    "explained_variance": 0.9236242771148682
+  },
+  "test_metrics": {
+    "r2": 0.9210290908813477,
+    "rmse": 0.2612281157485661,
+    "mae": 0.13514775037765503,
+    "mape_percent": 90.88729858398438,
+    "explained_variance": 0.9210293292999268
+  },
+  "test_metrics_per_year": {
+    "2020": {
+      "r2": 0.5117926597595215,
+      "rmse": 0.2615195982738845,
+      "mae": 0.13636991381645203,
+      "mape_percent": 19.712610244750977,
+      "explained_variance": 0.5313891172409058
+    },
+    "2021": {
+      "r2": 0.8670098781585693,
+      "rmse": 0.1615465689612959,
+      "mae": 0.10090595483779907,
+      "mape_percent": 150.342529296875,
+      "explained_variance": 0.8685864806175232
+    },
+    "2022": {
+      "r2": -3.169670581817627,
+      "rmse": 0.35529440492368364,
+      "mae": 0.15754976868629456,
+      "mape_percent": 10.65403938293457,
+      "explained_variance": -2.8920645713806152
+    },
+    "2023": {
+      "r2": 0.6924254298210144,
+      "rmse": 0.16099615949254312,
+      "mae": 0.10557685047388077,
+      "mape_percent": 207.4747314453125,
+      "explained_variance": 0.6924687623977661
+    },
+    "2024": {
+      "r2": 0.87482750415802,
+      "rmse": 0.3077144892771334,
+      "mae": 0.1754435896873474,
+      "mape_percent": 66.0439682006836,
+      "explained_variance": 0.8754201531410217
+    }
+  },
+  "residual_summary": {
+    "train": {
+      "mean": 4.575708317133831e-06,
+      "std": 0.2569313943386078,
+      "median": 0.0007886886596679688,
+      "q25": -0.07633629441261292,
+      "q75": 0.07367563247680664,
+      "min": -2.3775768280029297,
+      "max": 2.469334363937378,
+      "skewness": 0.6748706698417664
+    },
+    "test": {
+      "mean": 0.0004748770734295249,
+      "std": 0.26122769713401794,
+      "median": 0.0014233142137527466,
+      "q25": -0.07578115165233612,
+      "q75": 0.0739896297454834,
+      "min": -2.398049831390381,
+      "max": 2.433614730834961,
+      "skewness": 0.6875817179679871
+    }
+  },
+  "cross_validation": {
+    "folds": 3,
+    "per_fold": [
+      {
+        "r2": 0.9216223359107971,
+        "rmse": 0.2603315627593064,
+        "mae": 0.1352016031742096,
+        "mape_percent": 111.05567169189453,
+        "explained_variance": 0.9216228723526001
+      },
+      {
+        "r2": 0.9218879342079163,
+        "rmse": 0.26005164153962235,
+        "mae": 0.13458527624607086,
+        "mape_percent": 108.71575927734375,
+        "explained_variance": 0.9218884110450745
+      },
+      {
+        "r2": 0.9222985506057739,
+        "rmse": 0.25886171868486496,
+        "mae": 0.13487479090690613,
+        "mape_percent": 98.63138580322266,
+        "explained_variance": 0.9222985506057739
+      }
+    ],
+    "summary": {
+      "r2": {
+        "mean": 0.9219362735748291,
+        "std": 0.0002781715288819648
+      },
+      "rmse": {
+        "mean": 0.25974830766126455,
+        "std": 0.0006372435338300619
+      },
+      "mae": {
+        "mean": 0.13488722344239554,
+        "std": 0.0002517679441354056
+      },
+      "mape_percent": {
+        "mean": 106.13427225748698,
+        "std": 5.390657126679425
+      },
+      "explained_variance": {
+        "mean": 0.9219366113344828,
+        "std": 0.00027794211193135957
+      }
+    }
+  },
+  "model_params": {
+    "n_estimators": 140,
+    "max_depth": 5,
+    "learning_rate": 0.08,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "objective": "reg:squarederror",
+    "random_state": 42,
+    "n_jobs": 8
+  },
+  "random_seed": 42,
+  "ndvi_weight": 1.0,
+  "sample_weighting": {
+    "drought_threshold": -1.0,
+    "drought_weight": 1.0,
+    "drought_samples": 157986
+  }
+}
